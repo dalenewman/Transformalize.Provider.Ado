@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Ado", "src\Transformalize.Provider.Ado\Transformalize.Provider.Ado.csproj", "{A90A2043-2E23-4276-AACA-B3E9C1EC867D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Ado.Autofac", "src\Transformalize.Provider.Ado.Autofac\Transformalize.Provider.Ado.Autofac.csproj", "{E1C8C453-BB2E-4160-99A2-03506B76B7E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{E3964F25-5E54-488A-AD29-918333B2BD88}"
+	ProjectSection(SolutionItems) = preProject
+		nuget\nuget.bat = nuget\nuget.bat
+		nuget\Transformalize.Provider.Ado.Autofac.nuspec = nuget\Transformalize.Provider.Ado.Autofac.nuspec
+		nuget\Transformalize.Provider.Ado.nuspec = nuget\Transformalize.Provider.Ado.nuspec
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A90A2043-2E23-4276-AACA-B3E9C1EC867D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A90A2043-2E23-4276-AACA-B3E9C1EC867D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A90A2043-2E23-4276-AACA-B3E9C1EC867D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A90A2043-2E23-4276-AACA-B3E9C1EC867D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1C8C453-BB2E-4160-99A2-03506B76B7E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1C8C453-BB2E-4160-99A2-03506B76B7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1C8C453-BB2E-4160-99A2-03506B76B7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1C8C453-BB2E-4160-99A2-03506B76B7E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9DA9C8F-35A4-4103-964D-E037BC652B20}
+	EndGlobalSection
+EndGlobal

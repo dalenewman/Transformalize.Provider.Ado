@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A90A2043-2E23-4276-AACA-B3E9C1EC867D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Transformalize.Providers.Ado</RootNamespace>
+    <AssemblyName>Transformalize.Provider.Ado</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CfgNet, Version=0.10.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Cfg-NET.0.10.4\lib\net462\CfgNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Transformalize, Version=0.3.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.0.3.13-beta\lib\net462\Transformalize.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\AdoRunAction.cs" />
+    <Compile Include="AdoCalculatedFieldUpdater.cs" />
+    <Compile Include="AdoConstants.cs" />
+    <Compile Include="AdoDeleter.cs" />
+    <Compile Include="AdoEntityFormCommands.cs" />
+    <Compile Include="AdoEntityInitializer.cs" />
+    <Compile Include="AdoEntityInserter.cs" />
+    <Compile Include="AdoEntityMatchingFieldsReader.cs" />
+    <Compile Include="AdoEntityMatchingKeysReader.cs" />
+    <Compile Include="AdoEntityUpdater.cs" />
+    <Compile Include="AdoEntityWriter.cs" />
+    <Compile Include="AdoFlatTableCreator.cs" />
+    <Compile Include="AdoFlattenAction.cs" />
+    <Compile Include="AdoFlattenFirstRunAction.cs" />
+    <Compile Include="AdoFlattenInsertBySelectAction.cs" />
+    <Compile Include="AdoFlattenInsertByViewAction.cs" />
+    <Compile Include="AdoFlattenTwoPartUpdateAction.cs" />
+    <Compile Include="AdoFlattenUpdateByViewAction.cs" />
+    <Compile Include="AdoInitializer.cs" />
+    <Compile Include="AdoInputBatchReader.cs" />
+    <Compile Include="AdoInputReader.cs" />
+    <Compile Include="AdoInputVersionDetector.cs" />
+    <Compile Include="AdoMapReader.cs" />
+    <Compile Include="AdoMasterUpdater.cs" />
+    <Compile Include="AdoOutputController.cs" />
+    <Compile Include="AdoOutputProvider.cs" />
+    <Compile Include="AdoParameterFinder.cs" />
+    <Compile Include="AdoProvider.cs" />
+    <Compile Include="AdoReader.cs" />
+    <Compile Include="AdoRowCreator.cs" />
+    <Compile Include="AdoSchemaReader.cs" />
+    <Compile Include="AdoSqlModel.cs" />
+    <Compile Include="AdoStarController.cs" />
+    <Compile Include="AdoStarParametersReader.cs" />
+    <Compile Include="AdoStarViewCreator.cs" />
+    <Compile Include="AdoTwoPartMasterUpdater.cs" />
+    <Compile Include="AdoUpdateMasterKeysQueryWriter.cs" />
+    <Compile Include="ConnectionStringParser.cs" />
+    <Compile Include="Ext\AdoExtensions.cs" />
+    <Compile Include="Ext\AdoFilterExtensions.cs" />
+    <Compile Include="IConnectionFactory.cs" />
+    <Compile Include="NullConnectionFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
