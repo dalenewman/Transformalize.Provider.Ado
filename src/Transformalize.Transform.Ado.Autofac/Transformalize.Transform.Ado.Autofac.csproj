@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E1C8C453-BB2E-4160-99A2-03506B76B7E8}</ProjectGuid>
+    <ProjectGuid>{87D6BE79-CBF7-4D2E-81EF-C4413A128810}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Transformalize.Providers.Ado.Autofac</RootNamespace>
-    <AssemblyName>Transformalize.Provider.Ado.Autofac</AssemblyName>
+    <RootNamespace>Transformalize.Transforms.Ado.Autofac</RootNamespace>
+    <AssemblyName>Transformalize.Transform.Ado.Autofac</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -34,25 +34,24 @@
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Cfg.Net.Reader, Version=0.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cfg-NET.Reader.0.3.3\lib\net45\Cfg.Net.Reader.dll</HintPath>
-    </Reference>
     <Reference Include="Cfg.Net.Shorthand, Version=0.2.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Cfg-NET.Shorthand.0.2.11\lib\portable-net45+win8+wpa81+wp8\Cfg.Net.Shorthand.dll</HintPath>
     </Reference>
     <Reference Include="CfgNet, Version=0.10.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Cfg-NET.0.10.4\lib\net462\CfgNet.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
     <Reference Include="Transformalize, Version=0.3.17.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.0.3.17-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
@@ -60,6 +59,9 @@
   <ItemGroup>
     <Compile Include="AdoModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Transformalize.Provider.Ado\Transformalize.Provider.Ado.csproj">
@@ -71,16 +73,12 @@
       <Name>Transformalize.Transform.Ado</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set f="$(SolutionDir)..\Transformalize\Pipeline.Command\plugins"
 
 if exist %25f%25 copy /Y "$(TargetDir)Dapper.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.Autofac.dll" "%25f%25"
-</PostBuildEvent>
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Transform.Ado.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Transform.Ado.Autofac.dll" "%25f%25"</PostBuildEvent>
   </PropertyGroup>
 </Project>

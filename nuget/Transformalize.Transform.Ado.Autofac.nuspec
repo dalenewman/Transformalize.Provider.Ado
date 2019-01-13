@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <package>
   <metadata>
-    <id>Transformalize.Provider.Ado.Autofac</id>
+    <id>Transformalize.Transform.Ado.Autofac</id>
     <version>0.3.15-beta</version>
-    <title>Transformalize Transform and Provider using ADO Autofac Module</title>
+    <title>Transformalize ADO based transforms</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
     <licenseUrl>https://github.com/dalenewman/Transformalize.Provider.Ado/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Transformalize Transform using ADO Autofac Module</description>
+    <description>Transformalize ADO based transforms</description>
     <releaseNotes>target 462</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
@@ -22,6 +22,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\src\Transformalize.Provider.Ado.Autofac\bin\Release\Transformalize.Provider.Ado.Autofac.dll" target="lib\net462\Transformalize.Provider.Ado.Autofac.dll" />
+    <file src="..\src\Transformalize.Transform.Ado.Autofac\bin\Release\Transformalize.Transform.Ado.Autofac.dll" target="lib\net462\Transformalize.Transform.Ado.Autofac.dll" />
   </files>
 </package>

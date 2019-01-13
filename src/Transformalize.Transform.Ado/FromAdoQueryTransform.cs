@@ -37,23 +37,6 @@ namespace Transformalize.Transforms.Ado {
             _input = SingleInputForMultipleOutput();
             _output = MultipleOutput();
 
-            // map parameters to ado parameters and set values
-            if (Context.Operation.Query.Contains("@")) {
-                var active = Context.Process.GetActiveParameters();
-                foreach (var parameter in active) {
-                    if (parameter.Name.Contains(".")) {
-                        parameter.Name = parameter.Name.Replace(".", "_");
-                    }
-                }
-                foreach (var name in new AdoParameterFinder().Find(Context.Operation.Query).Distinct().ToList()) {
-                    var match = active.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                    if (match != null) {
-                        Context.Debug(() => $"Set @{match.Name} to {match.Value}");
-                        _editor[match.Name] = match.Convert(match.Value);
-                    }
-                }
-            }
-
             _cn = factory.GetConnection();
             _cn.Open();
         }
@@ -61,6 +44,23 @@ namespace Transformalize.Transforms.Ado {
         public override IRow Operate(IRow row) {
 
             var query = Context.Operation.Query == string.Empty ? row[_input].ToString() : Context.Operation.Query;
+
+            // map parameters to ado parameters and set values
+            if (query.Contains("@")) {
+                var active = Context.Process.GetActiveParameters();
+                foreach (var parameter in active) {
+                    if (parameter.Name.Contains(".")) {
+                        parameter.Name = parameter.Name.Replace(".", "_");
+                    }
+                }
+                foreach (var name in new AdoParameterFinder().Find(query).Distinct().ToList()) {
+                    var match = active.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    if (match != null) {
+                        Context.Debug(() => $"Set @{match.Name} to {match.Value}");
+                        _editor[match.Name] = match.Convert(match.Value);
+                    }
+                }
+            }
 
             // map fields to ado parameters and set values
             var fields = Context.Entity.GetFieldMatches(query).ToArray();
