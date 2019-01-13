@@ -16,8 +16,8 @@
 // limitations under the License.
 #endregion
 
-using System.Data;
 using Dapper;
+using System.Data;
 using Transformalize.Actions;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -46,23 +46,25 @@ namespace Transformalize.Providers.Ado {
                 }
             }
 
-            try
-            {
+            var droppedOutputView = false;
+            try {
                 var sql = _context.SqlDropOutputView(_cf);
                 cn.Execute(sql);
+                droppedOutputView = true;
             } catch (System.Data.Common.DbException ex) {
                 _context.Warn($"Could not drop output view {_context.Entity.OutputViewName(_context.Process.Name)}");
                 _context.Debug(() => ex.Message);
             }
 
-            try {
-                cn.Execute(_context.SqlDropOutputViewAsTable(_cf));
-            } catch (System.Data.Common.DbException ex) {
-                _context.Debug(() => ex.Message);
+            if (!droppedOutputView) {
+                try {
+                    cn.Execute(_context.SqlDropOutputViewAsTable(_cf));
+                } catch (System.Data.Common.DbException ex) {
+                    _context.Debug(() => ex.Message);
+                }
             }
 
-            try
-            {
+            try {
                 var sql = _context.SqlDropOutput(_cf);
                 cn.Execute(sql);
             } catch (System.Data.Common.DbException ex) {
@@ -72,7 +74,7 @@ namespace Transformalize.Providers.Ado {
 
         }
 
-        void Create(IDbConnection cn) {
+        private void Create(IDbConnection cn) {
             var createSql = _context.SqlCreateOutput(_cf);
             try {
                 cn.Execute(createSql);

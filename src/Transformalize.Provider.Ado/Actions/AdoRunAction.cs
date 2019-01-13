@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Dynamic;
 using System.Linq;
 using Cfg.Net.Contracts;
@@ -78,7 +79,7 @@ namespace Transformalize.Providers.Ado.Actions {
                     var message = $"{(_node.Description == string.Empty ? _node.Type + " action" : "'" + _node.Description + "'")} affected {(_node.RowCount == -1 ? 0 : _node.RowCount)} row{_node.RowCount.Plural()}.";
                     response.Message = message;
                     _context.Info(message);
-                } catch (Exception ex) {
+                } catch (DbException ex) {
                     response.Code = 500;
                     response.Message = ex.Message + " " + ex.StackTrace + " " + _node.Command.Replace("{", "{{").Replace("}", "}}");
                 }

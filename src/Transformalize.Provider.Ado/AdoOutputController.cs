@@ -170,6 +170,9 @@ namespace Transformalize.Providers.Ado {
                     cn.Close();
                 }
             }
+
+            OutputProvider.End();
+
             _stopWatch.Stop();
             Context.Debug(() => $"Entity {Context.Entity} ending {_stopWatch.Elapsed}");
         }

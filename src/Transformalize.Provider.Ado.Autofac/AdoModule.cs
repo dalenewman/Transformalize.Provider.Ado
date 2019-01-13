@@ -14,15 +14,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Autofac;
+using Cfg.Net.Reader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using Cfg.Net.Reader;
 using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Providers.Ado.Actions;
+using Transformalize.Transforms.Ado;
 
 namespace Transformalize.Providers.Ado.Autofac {
     public class AdoModule : Module {
@@ -54,6 +55,21 @@ namespace Transformalize.Providers.Ado.Autofac {
                             return new AdoRunAction(context, action, ctx.ResolveNamed<IConnectionFactory>(connection.Key), new DefaultReader(new FileReader(), new WebReader()));
                         }).Named<IAction>(action.Key);
                         break;
+                }
+            }
+
+            // transforms
+            foreach (var entity in process.Entities) {
+                foreach (var field in entity.GetAllFields().Where(f=>f.Transforms.Any())) {
+                    foreach (var transform in field.Transforms.Where(t => t.Method == "fromquery")) {
+                        var connection = process.Connections.FirstOrDefault(c => c.Name == transform.Connection);
+                        if (connection != null && adoProviders.Contains(connection.Provider)) {
+                            builder.Register<ITransform>(ctx => {
+                                var context = new PipelineContext(ctx.Resolve<IPipelineLogger>(), process, entity, field, transform);
+                                return new FromAdoQueryTransform(context, ctx.ResolveNamed<IConnectionFactory>(connection.Key));
+                            }).Named<ITransform>(transform.Key);
+                        }
+                    }
                 }
             }
 

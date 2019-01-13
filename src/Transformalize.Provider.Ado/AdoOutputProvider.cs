@@ -16,10 +16,11 @@
 // limitations under the License.
 #endregion
 
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using Dapper;
+using System.Linq;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Providers.Ado.Ext;
@@ -94,7 +95,12 @@ namespace Transformalize.Providers.Ado {
         }
 
         public void End() {
-            throw new NotImplementedException();
+            if (_context.Process.Mode == "init" && _context.Entity != null && _context.Entity.RelationshipToMaster.Any()) {
+                var response = new AdoEntityDepthChecker(_context, _cf).Execute();
+                if (response.Code != 200) {
+                    _context.Warn(response.Message);
+                }
+            }
         }
 
         public int GetNextTflBatchId() {

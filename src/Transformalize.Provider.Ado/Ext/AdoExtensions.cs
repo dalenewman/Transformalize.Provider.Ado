@@ -242,6 +242,23 @@ FROM (
             return sql;
         }
 
+        public static string SqlDepthFinder(this OutputContext c, IConnectionFactory cf) {
+            var viewName = c.Entity.OutputViewName(c.Process.Name);
+            var closestRelation = c.Entity.RelationshipToMaster.First();
+            var isLeft = closestRelation.LeftEntity == c.Entity.Alias || closestRelation.LeftEntity == c.Entity.Name;
+            var join = string.Join(", ", (isLeft ? closestRelation.GetLeftJoinFields() : closestRelation.GetRightJoinFields()).Select(n=>c.Entity.GetField(n).Alias));
+            var sql = $@"
+                SELECT MAX(Records) AS Depth
+                FROM (
+	                SELECT {join}, COUNT(*) AS Records
+	                FROM {cf.Enclose(viewName)}
+	                GROUP BY {join}
+                ) r{cf.Terminator}
+            ";
+            c.Debug(() => "SQL Depth Finder Query:" + sql);
+            return sql;
+        }
+
         public static string SqlDropOutputViewAsTable(this OutputContext c, IConnectionFactory cf) {
             var sql = $"DROP TABLE {cf.Enclose(c.Entity.OutputViewName(c.Process.Name))}{cf.Terminator}";
             c.Debug(() => sql);
