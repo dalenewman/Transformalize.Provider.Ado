@@ -23,10 +23,9 @@ using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Providers.Ado.Actions;
-using Transformalize.Transforms.Ado;
 
 namespace Transformalize.Providers.Ado.Autofac {
-    public class AdoModule : Module {
+    public class AdoProviderModule : Module {
 
 
         protected override void Load(ContainerBuilder builder) {

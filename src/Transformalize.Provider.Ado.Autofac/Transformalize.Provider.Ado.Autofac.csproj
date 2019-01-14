@@ -53,22 +53,18 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Transformalize, Version=0.3.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.3.17-beta\lib\net462\Transformalize.dll</HintPath>
+    <Reference Include="Transformalize, Version=0.3.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.0.3.18-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdoModule.cs" />
+    <Compile Include="AdoProviderModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Transformalize.Provider.Ado\Transformalize.Provider.Ado.csproj">
       <Project>{a90a2043-2e23-4276-aaca-b3e9c1ec867d}</Project>
       <Name>Transformalize.Provider.Ado</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Transformalize.Transform.Ado\Transformalize.Transform.Ado.csproj">
-      <Project>{850924d7-5220-4afa-9e38-d0a28d3f7faa}</Project>
-      <Name>Transformalize.Transform.Ado</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

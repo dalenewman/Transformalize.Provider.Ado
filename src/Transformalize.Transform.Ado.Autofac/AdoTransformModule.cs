@@ -1,6 +1,6 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Cfg.Net.Shorthand;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Transformalize.Configuration;
@@ -10,7 +10,7 @@ using Transformalize.Providers.Ado;
 using Parameter = Cfg.Net.Shorthand.Parameter;
 
 namespace Transformalize.Transforms.Ado.Autofac {
-    public class AdoModule : Module {
+    public class AdoTransformModule : Module {
 
         private HashSet<string> _methods;
         private ShorthandRoot _shortHand;
@@ -21,33 +21,41 @@ namespace Transformalize.Transforms.Ado.Autofac {
             _methods = builder.Properties.ContainsKey("Methods") ? (HashSet<string>)builder.Properties["Methods"] : new HashSet<string>();
             _shortHand = builder.Properties.ContainsKey("ShortHand") ? (ShorthandRoot)builder.Properties["ShortHand"] : new ShorthandRoot();
 
-            // ado run (command) is short-hand, just pass it the command and it will use connection from itself, it's field, or it's entity
-            var signatures = new AdoRunTransform().GetSignatures().ToArray();
-            RegisterShortHand(signatures);
-            RegisterTransform(builder, c => new AdoRunTransform(), signatures);
+            RegisterShortHand(new AdoRunTransform().GetSignatures());
 
             if (!builder.Properties.ContainsKey("Process")) {
                 return;
             }
 
             var adoProviders = new HashSet<string>(new[] { "sqlserver", "mysql", "postgresql", "sqlite", "sqlce", "access" }, StringComparer.OrdinalIgnoreCase);
+            var adoMethods = new HashSet<string>(new[] { "fromquery", "run" });
+
             var process = (Process)builder.Properties["Process"];
 
-            // ado from query transform is long-hand, it has a collection of fields to produce
+            // only register by transform key if provider is ado, this allows other providers to implement fromquery and run methods
             foreach (var entity in process.Entities) {
                 foreach (var field in entity.GetAllFields().Where(f => f.Transforms.Any())) {
-                    foreach (var transform in field.Transforms.Where(t => t.Method == "fromquery")) {
+                    foreach (var transform in field.Transforms.Where(t => adoMethods.Contains(t.Method))) {
+                        if (transform.Connection == string.Empty) {
+                            transform.Connection = field.Connection;
+                        }
                         var connection = process.Connections.FirstOrDefault(c => c.Name == transform.Connection);
                         if (connection != null && adoProviders.Contains(connection.Provider)) {
-                            builder.Register<ITransform>(ctx => {
-                                var context = new PipelineContext(ctx.Resolve<IPipelineLogger>(), process, entity, field, transform);
-                                return new FromAdoQueryTransform(context, ctx.ResolveNamed<IConnectionFactory>(connection.Key));
-                            }).Named<ITransform>(transform.Key);
+                            if (transform.Method == "fromquery") { // ado from query
+                                builder.Register<ITransform>(ctx => {
+                                    var context = new PipelineContext(ctx.Resolve<IPipelineLogger>(), process, entity, field, transform);
+                                    return new AdoFromQueryTransform(context, ctx.ResolveNamed<IConnectionFactory>(connection.Key));
+                                }).Named<ITransform>(transform.Key);
+                            } else {  // ado run
+                                builder.Register<ITransform>(ctx => {
+                                    var context = new PipelineContext(ctx.Resolve<IPipelineLogger>(), process, entity, field, transform);
+                                    return new AdoRunTransform(context, ctx.ResolveNamed<IConnectionFactory>(connection.Key));
+                                }).Named<ITransform>(transform.Key);
+                            }
                         }
                     }
                 }
             }
-
         }
 
         private void RegisterShortHand(IEnumerable<OperationSignature> signatures) {
@@ -72,12 +80,6 @@ namespace Transformalize.Transforms.Ado.Autofac {
                     });
                 }
                 _shortHand.Signatures.Add(signature);
-            }
-        }
-
-        private static void RegisterTransform(ContainerBuilder builder, Func<IContext, ITransform> getTransform, IEnumerable<OperationSignature> signatures) {
-            foreach (var s in signatures) {
-                builder.Register((c, p) => getTransform(p.Positional<IContext>(0))).Named<ITransform>(s.Method);
             }
         }
 

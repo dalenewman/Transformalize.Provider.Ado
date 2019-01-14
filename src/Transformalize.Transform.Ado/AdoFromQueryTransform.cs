@@ -10,7 +10,7 @@ using Transformalize.Contracts;
 using Transformalize.Providers.Ado;
 
 namespace Transformalize.Transforms.Ado {
-    public class FromAdoQueryTransform : BaseTransform {
+    public class AdoFromQueryTransform : BaseTransform {
 
         private readonly Field _input;
         private readonly IDictionary<string, object> _editor;
@@ -18,7 +18,7 @@ namespace Transformalize.Transforms.Ado {
         private readonly Field[] _output;
         private readonly ExpandoObject _parameters;
 
-        public FromAdoQueryTransform(IContext context = null, IConnectionFactory factory = null) : base(context, null) {
+        public AdoFromQueryTransform(IContext context = null, IConnectionFactory factory = null) : base(context, null) {
 
             ProducesFields = true;
 
@@ -95,6 +95,10 @@ namespace Transformalize.Transforms.Ado {
             if (_cn != null && _cn.State != ConnectionState.Closed) {
                 _cn.Close();
             }
+        }
+
+        public override IEnumerable<OperationSignature> GetSignatures() {
+            yield return new OperationSignature("fromquery") { Parameters = new List<OperationParameter>(1) { new OperationParameter("query") } };
         }
     }
 }

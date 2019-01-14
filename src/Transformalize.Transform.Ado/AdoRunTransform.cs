@@ -87,8 +87,11 @@ namespace Transformalize.Transforms.Ado {
         }
 
         public override IRow Operate(IRow row) {
-           throw new NotImplementedException("This should never be called! See Operate on rows.");
+            throw new NotImplementedException("This should never be called! See Operate on rows.");
         }
 
+        public override IEnumerable<OperationSignature> GetSignatures() {
+            yield return new OperationSignature("run") { Parameters = new List<OperationParameter>(1) { new OperationParameter("command") } };
+        }
     }
 }
