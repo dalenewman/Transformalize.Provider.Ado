@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado.Autofac</id>
-    <version>0.3.16-beta</version>
+    <version>0.3.19-beta</version>
     <title>Transformalize Transform and Provider using ADO Autofac Module</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -10,13 +10,13 @@
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Transformalize Transform using ADO Autofac Module</description>
-    <releaseNotes>target 462</releaseNotes>
+    <releaseNotes>Fix depth checker and index output</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="net462">
         <dependency id="Autofac" version="4.6.2" />
-        <dependency id="Transformalize.Provider.Ado" version="0.3.16-beta" />
+        <dependency id="Transformalize.Provider.Ado" version="0.3.19-beta" />
       </group>
     </dependencies>
   </metadata>

@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado</id>
-    <version>0.3.16-beta</version>
+    <version>0.3.19-beta</version>
     <title>Transformalize Provider using ADO</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Transformalize Transform using ADO</description>
-    <releaseNotes>target 462</releaseNotes>
+    <releaseNotes>Fix depth checker and index output</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
     <dependencies>

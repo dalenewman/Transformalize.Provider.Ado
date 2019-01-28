@@ -236,6 +236,20 @@ FROM (
             return sql;
         }
 
+        public static string SqlCreateVersionIndex(this OutputContext c, IConnectionFactory cf, Field version) {
+            var table = c.Entity.OutputTableName(c.Process.Name);
+            var view = c.Entity.OutputViewName(c.Process.Name);
+            var index = cf.Enclose($"IX_{view}_Version");
+            return c.Entity.Delete ? $"CREATE INDEX {index} ON {cf.Enclose(table)}({cf.Enclose(c.Entity.TflDeleted().FieldName())},{cf.Enclose(version.FieldName())})" : $"CREATE INDEX {index} ON {cf.Enclose(table)}({version.FieldName()})";
+        }
+
+        public static string SqlCreateBatchIndex(this OutputContext c, IConnectionFactory cf) {
+            var table = c.Entity.OutputTableName(c.Process.Name);
+            var view = c.Entity.OutputViewName(c.Process.Name);
+            var index = cf.Enclose($"IX_{view}_Batch");
+            return $"CREATE INDEX {index} ON {cf.Enclose(table)}({cf.Enclose(c.Entity.TflBatchId().FieldName())})";
+        }
+
         public static string SqlDropOutputView(this OutputContext c, IConnectionFactory cf) {
             var sql = $"DROP {(cf.AdoProvider == AdoProvider.Access ? "TABLE" : "VIEW")} {cf.Enclose(c.Entity.OutputViewName(c.Process.Name))}{cf.Terminator}";
             c.Debug(() => sql);
@@ -243,15 +257,16 @@ FROM (
         }
 
         public static string SqlDepthFinder(this OutputContext c, IConnectionFactory cf) {
-            var viewName = c.Entity.OutputViewName(c.Process.Name);
-            var closestRelation = c.Entity.RelationshipToMaster.First();
-            var isLeft = closestRelation.LeftEntity == c.Entity.Alias || closestRelation.LeftEntity == c.Entity.Name;
-            var join = string.Join(", ", (isLeft ? closestRelation.GetLeftJoinFields() : closestRelation.GetRightJoinFields()).Select(n=>c.Entity.GetField(n).Alias));
+            var view = c.Entity.OutputViewName(c.Process.Name);
+            var closest = c.Entity.RelationshipToMaster.First();
+            var isLeft = closest.LeftEntity == c.Entity.Alias;
+            var join = string.Join(", ", (isLeft ? closest.Summary.LeftFields : closest.Summary.RightFields).Select(f => f.Alias));
+
             var sql = $@"
                 SELECT MAX(Records) AS Depth
                 FROM (
 	                SELECT {join}, COUNT(*) AS Records
-	                FROM {cf.Enclose(viewName)}
+	                FROM {cf.Enclose(view)}
 	                GROUP BY {join}
                 ) r{cf.Terminator}
             ";

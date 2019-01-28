@@ -68,9 +68,7 @@ namespace Transformalize.Providers.Ado.Ext {
             builder.Append(" ");
             builder.Append(rightSide);
 
-            var expression = builder.ToString();
-            c.Info("Filter: {0}", expression);
-            return expression;
+            return builder.ToString();
         }
 
         private static string ResolveSide(Filter filter, string side, IConnectionFactory factory) {

@@ -68,13 +68,13 @@ namespace Transformalize.Providers.Ado {
 
             switch (_cf.AdoProvider) {
                 case AdoProvider.PostgreSql:
-                    sql = $"SELECT {_cf.Enclose(version.Alias)} FROM {objectName} WHERE {_cf.Enclose(Constants.TflDeleted)} = false ORDER BY {_cf.Enclose(version.Alias)} DESC LIMIT 1;";
+                    sql = _context.Entity.Delete ? $"SELECT {_cf.Enclose(version.Alias)} FROM {objectName} WHERE {_cf.Enclose(Constants.TflDeleted)} = false ORDER BY {_cf.Enclose(version.Alias)} DESC LIMIT 1;" : $"SELECT {_cf.Enclose(version.Alias)} FROM {objectName} ORDER BY {_cf.Enclose(version.Alias)} DESC LIMIT 1;";
                     break;
                 case AdoProvider.SqlCe:
-                    sql = $"SELECT MAX({_cf.Enclose(version.FieldName())}) FROM {objectName} WHERE {_cf.Enclose(_context.Entity.TflDeleted().FieldName())} = 0;";
+                    sql = _context.Entity.Delete ? $"SELECT MAX({_cf.Enclose(version.FieldName())}) FROM {objectName} WHERE {_cf.Enclose(_context.Entity.TflDeleted().FieldName())} = 0;" : $"SELECT MAX({_cf.Enclose(version.FieldName())}) FROM {objectName};";
                     break;
                 default:
-                    sql = $"SELECT MAX({_cf.Enclose(version.Alias)}) FROM {objectName} WHERE {_cf.Enclose(Constants.TflDeleted)} = 0;";
+                    sql = _context.Entity.Delete ? $"SELECT MAX({_cf.Enclose(version.Alias)}) FROM {objectName} WHERE {_cf.Enclose(Constants.TflDeleted)} = 0;" : $"SELECT MAX({_cf.Enclose(version.Alias)}) FROM {objectName};";
                     break;
             }
 
@@ -95,12 +95,41 @@ namespace Transformalize.Providers.Ado {
         }
 
         public void End() {
-            if (_context.Process.Mode == "init" && _context.Entity != null && _context.Entity.RelationshipToMaster.Any()) {
+            if (_context.Process.Mode != "init" || _context.Entity == null)
+                return;
+
+            if (_context.Entity.Version != string.Empty) {
+
+                try {
+                    if (_cn.State != ConnectionState.Open) {
+                        _cn.Open();
+                    }
+
+                    var version = _context.Entity.GetVersionField();
+                    _cn.Execute(_context.SqlCreateVersionIndex(_cf, version), commandTimeout: _context.Connection.RequestTimeout);
+                    _context.Debug(() => $"Indexed version for {_context.Entity.Alias}.");
+                    _context.Debug(() => _context.SqlCreateVersionIndex(_cf, version));
+
+                    if (_context.Entity.IsMaster) {
+                        _cn.Execute(_context.SqlCreateBatchIndex(_cf), commandTimeout: _context.Connection.RequestTimeout);
+                        _context.Debug(() => $"Indexed batch for {_context.Entity.Alias}.");
+                        _context.Debug(() => _context.SqlCreateBatchIndex(_cf));
+                    }
+
+                } catch (System.Data.Common.DbException ex) {
+                    _context.Warn($"Error creating index: {ex.Message}");
+                    _context.Debug(() => ex.StackTrace);
+
+                }
+            }
+
+            if (_context.Entity.RelationshipToMaster.Any()) {
                 var response = new AdoEntityDepthChecker(_context, _cf).Execute();
                 if (response.Code != 200) {
                     _context.Warn(response.Message);
                 }
             }
+
         }
 
         public int GetNextTflBatchId() {

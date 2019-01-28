@@ -1,6 +1,5 @@
 using Dapper;
 using System.Data;
-using System.Linq;
 using Transformalize.Actions;
 using Transformalize.Context;
 using Transformalize.Contracts;
