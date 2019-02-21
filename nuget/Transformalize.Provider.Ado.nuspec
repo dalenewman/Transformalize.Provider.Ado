@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Transformalize Transform using ADO</description>
-    <releaseNotes>Fix depth checker and index output</releaseNotes>
+    <releaseNotes>updated exception handling</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
     <dependencies>

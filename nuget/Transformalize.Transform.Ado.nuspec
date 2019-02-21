@@ -8,7 +8,7 @@
     <owners>Dale Newman</owners>
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Transformalize Transform using ADO</description>
+    <description>updated exception handling</description>
     <releaseNotes>target 462</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>

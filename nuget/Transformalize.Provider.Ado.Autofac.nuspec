@@ -8,7 +8,7 @@
     <owners>Dale Newman</owners>
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Transformalize Transform using ADO Autofac Module</description>
+    <description>updated exception handling</description>
     <releaseNotes>Fix depth checker and index output</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
