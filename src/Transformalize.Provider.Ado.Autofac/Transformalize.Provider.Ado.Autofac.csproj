@@ -53,8 +53,8 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Transformalize, Version=0.3.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.3.24-beta\lib\net462\Transformalize.dll</HintPath>
+    <Reference Include="Transformalize, Version=0.3.25.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.0.3.25-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -75,8 +75,11 @@
     <PostBuildEvent>set f="$(SolutionDir)..\Transformalize\Pipeline.Command\plugins"
 
 if exist %25f%25 copy /Y "$(TargetDir)Dapper.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.*" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.Autofac.*" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.pdb" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.Autofac.dll" "%25f%25"
+if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.Autofac.pdb" "%25f%25"
+
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

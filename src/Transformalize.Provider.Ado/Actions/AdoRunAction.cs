@@ -16,13 +16,13 @@
 // limitations under the License.
 #endregion
 
+using Cfg.Net.Contracts;
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Dynamic;
 using System.Linq;
-using Cfg.Net.Contracts;
-using Dapper;
 using Transformalize.Actions;
 using Transformalize.Contracts;
 using Transformalize.Extensions;
@@ -44,8 +44,18 @@ namespace Transformalize.Providers.Ado.Actions {
         public ActionResponse Execute() {
             var response = new ActionResponse { Action = _node };
             using (var cn = _cf.GetConnection()) {
-                cn.Open();
+
                 try {
+                    cn.Open();
+                } catch (DbException e) {
+                    _context.Error($"Can't open {_cf.AdoProvider} connection specified in {_node.Type} action.");
+                    response.Message = e.Message;
+                    response.Code = 500;
+                    return response;
+                }
+
+                try {
+
                     if (_node.Command == string.Empty) {
                         var logger = new Cfg.Net.Loggers.MemoryLogger();
                         _node.Command = _commandReader.Read(_node.Url == string.Empty ? _node.File : _node.Url, new Dictionary<string, string>(), logger);
@@ -81,7 +91,7 @@ namespace Transformalize.Providers.Ado.Actions {
                     _context.Info(message);
                 } catch (DbException ex) {
                     response.Code = 500;
-                    response.Message = ex.Message + " " + ex.StackTrace + " " + _node.Command.Replace("{", "{{").Replace("}", "}}");
+                    response.Message = ex.Message + Environment.NewLine + _node.Command.Replace("{", "{{").Replace("}", "}}");
                 }
             }
             return response;

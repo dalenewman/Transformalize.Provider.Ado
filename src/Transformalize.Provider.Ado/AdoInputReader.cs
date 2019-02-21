@@ -16,11 +16,12 @@
 // limitations under the License.
 #endregion
 
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
-using Dapper;
 using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -49,7 +50,14 @@ namespace Transformalize.Providers.Ado {
 
             using (var cn = _factory.GetConnection()) {
 
-                cn.Open();
+                try {
+                    cn.Open();
+                } catch (DbException e) {
+                    _input.Error($"Can't open {_input.Connection} for reading.");
+                    _input.Error(e.Message);
+                    yield break;
+                }
+
                 var cmd = cn.CreateCommand();
 
                 if (string.IsNullOrEmpty(_input.Entity.Query)) {
@@ -107,7 +115,7 @@ namespace Transformalize.Providers.Ado {
 
                 try {
                     reader = cmd.ExecuteReader(CommandBehavior.SequentialAccess);
-                } catch (Exception ex) {
+                } catch (DbException ex) {
                     _input.Error(ex.Message);
                     yield break;
                 }

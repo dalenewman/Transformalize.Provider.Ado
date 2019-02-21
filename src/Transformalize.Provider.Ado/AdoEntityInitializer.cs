@@ -17,7 +17,9 @@
 #endregion
 
 using Dapper;
+using System;
 using System.Data;
+using System.Data.Common;
 using Transformalize.Actions;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -41,7 +43,7 @@ namespace Transformalize.Providers.Ado {
             if (!_context.Connection.DropControl) {
                 try {
                     cn.Execute(_context.SqlDeleteEntityFromControl(_cf), new { Entity = _context.Entity.Alias });
-                } catch (System.Data.Common.DbException ex) {
+                } catch (DbException ex) {
                     _context.Debug(() => ex.Message);
                 }
             }
@@ -51,7 +53,7 @@ namespace Transformalize.Providers.Ado {
                 var sql = _context.SqlDropOutputView(_cf);
                 cn.Execute(sql);
                 droppedOutputView = true;
-            } catch (System.Data.Common.DbException ex) {
+            } catch (DbException ex) {
                 _context.Warn($"Could not drop output view {_context.Entity.OutputViewName(_context.Process.Name)}");
                 _context.Debug(() => ex.Message);
             }
@@ -59,7 +61,7 @@ namespace Transformalize.Providers.Ado {
             if (!droppedOutputView) {
                 try {
                     cn.Execute(_context.SqlDropOutputViewAsTable(_cf));
-                } catch (System.Data.Common.DbException ex) {
+                } catch (DbException ex) {
                     _context.Debug(() => ex.Message);
                 }
             }
@@ -67,7 +69,7 @@ namespace Transformalize.Providers.Ado {
             try {
                 var sql = _context.SqlDropOutput(_cf);
                 cn.Execute(sql);
-            } catch (System.Data.Common.DbException ex) {
+            } catch (DbException ex) {
                 _context.Warn($"Could not drop output {_context.Entity.OutputTableName(_context.Process.Name)}");
                 _context.Debug(() => ex.Message);
             }
@@ -78,7 +80,7 @@ namespace Transformalize.Providers.Ado {
             var createSql = _context.SqlCreateOutput(_cf);
             try {
                 cn.Execute(createSql);
-            } catch (System.Data.Common.DbException ex) {
+            } catch (DbException ex) {
                 _context.Error($"Could not create output {_context.Entity.OutputTableName(_context.Process.Name)}");
                 _context.Error(ex, ex.Message);
             }
@@ -86,7 +88,7 @@ namespace Transformalize.Providers.Ado {
             try {
                 var createIndex = _context.SqlCreateOutputUniqueIndex(_cf);
                 cn.Execute(createIndex);
-            } catch (System.Data.Common.DbException ex) {
+            } catch (DbException ex) {
                 _context.Error($"Could not create unique index on output {_context.Entity.OutputTableName(_context.Process.Name)}");
                 _context.Error(ex, ex.Message);
             }
@@ -97,7 +99,7 @@ namespace Transformalize.Providers.Ado {
             try {
                 var createView = _context.SqlCreateOutputView(_cf);
                 cn.Execute(createView);
-            } catch (System.Data.Common.DbException ex) {
+            } catch (DbException ex) {
                 _context.Error($"Could not create output view {_context.Entity.OutputViewName(_context.Process.Name)}");
                 _context.Error(ex, ex.Message);
             }
@@ -105,7 +107,13 @@ namespace Transformalize.Providers.Ado {
 
         public ActionResponse Execute() {
             using (var cn = _cf.GetConnection()) {
-                cn.Open();
+                try {
+                    cn.Open();
+                } catch (DbException e) {
+                    _context.Error($"Couldn't open {_context.Connection}.");
+                    _context.Error(e.Message);
+                    Environment.Exit(1);
+                }
                 Destroy(cn);
                 Create(cn);
             }

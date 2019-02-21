@@ -16,9 +16,10 @@
 // limitations under the License.
 #endregion
 
+using Dapper;
+using System;
 using System.Data;
 using System.Data.Common;
-using Dapper;
 using Transformalize.Actions;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -60,8 +61,9 @@ namespace Transformalize.Providers.Ado {
                 try {
                     cn.Open();
                 } catch (DbException ex) {
+                    _context.Error($"Couldn't open {_context.Connection}.");
                     _context.Error(ex.Message);
-                    return new ActionResponse(500, $"Could not open {_context.Connection.Name} connection.");
+                    Environment.Exit(1);
                 }
 
                 Destroy(cn);
