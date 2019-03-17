@@ -70,10 +70,10 @@ namespace Transformalize.Providers.Ado.Autofac {
             // flatten output action
             if (process.Flatten) {
                 foreach (var connection in process.Connections.Where(c => adoProviders.Contains(c.Provider))) {
-                    builder.Register<IAction>((ctx => {
-                        var o = ctx.ResolveNamed<OutputContext>(connection.Key);
-                        return new AdoFlattenAction(o, ctx.ResolveNamed<IConnectionFactory>(connection.Key));
-                    })).Named<IAction>(connection.Key);
+                    builder.Register<IAction>(ctx => {
+                       var o = ctx.ResolveNamed<OutputContext>(connection.Key);
+                       return new AdoFlattenAction(o, ctx.ResolveNamed<IConnectionFactory>(connection.Key));
+                    }).Named<IAction>(connection.Key);
                 }
             }
 
