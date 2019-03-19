@@ -17,7 +17,6 @@
 #endregion
 
 using Dapper;
-using System;
 using System.Data;
 using System.Data.Common;
 using Transformalize.Actions;
@@ -26,98 +25,98 @@ using Transformalize.Contracts;
 using Transformalize.Providers.Ado.Ext;
 
 namespace Transformalize.Providers.Ado {
-    public class AdoEntityInitializer : IAction {
+   public class AdoEntityInitializer : IAction {
 
-        private readonly OutputContext _context;
-        private readonly IConnectionFactory _cf;
+      private readonly OutputContext _context;
+      private readonly IConnectionFactory _cf;
 
-        public AdoEntityInitializer(OutputContext context, IConnectionFactory cf) {
-            _context = context;
-            _cf = cf;
-        }
+      public AdoEntityInitializer(OutputContext context, IConnectionFactory cf) {
+         _context = context;
+         _cf = cf;
+      }
 
-        private void Destroy(IDbConnection cn) {
+      private void Destroy(IDbConnection cn) {
 
-            _context.Warn("Initializing");
+         _context.Warn("Initializing");
 
-            if (!_context.Connection.DropControl) {
-                try {
-                    cn.Execute(_context.SqlDeleteEntityFromControl(_cf), new { Entity = _context.Entity.Alias });
-                } catch (DbException ex) {
-                    _context.Debug(() => ex.Message);
-                }
-            }
-
-            var droppedOutputView = false;
+         if (!_context.Connection.DropControl) {
             try {
-                var sql = _context.SqlDropOutputView(_cf);
-                cn.Execute(sql);
-                droppedOutputView = true;
+               cn.Execute(_context.SqlDeleteEntityFromControl(_cf), new { Entity = _context.Entity.Alias });
             } catch (DbException ex) {
-                _context.Warn($"Could not drop output view {_context.Entity.OutputViewName(_context.Process.Name)}");
-                _context.Debug(() => ex.Message);
+               _context.Debug(() => ex.Message);
             }
+         }
 
-            if (!droppedOutputView) {
-                try {
-                    cn.Execute(_context.SqlDropOutputViewAsTable(_cf));
-                } catch (DbException ex) {
-                    _context.Debug(() => ex.Message);
-                }
-            }
+         var droppedOutputView = false;
+         try {
+            var sql = _context.SqlDropOutputView(_cf);
+            cn.Execute(sql);
+            droppedOutputView = true;
+         } catch (DbException ex) {
+            _context.Warn($"Could not drop output view {_context.Entity.OutputViewName(_context.Process.Name)}");
+            _context.Debug(() => ex.Message);
+         }
 
+         if (!droppedOutputView) {
             try {
-                var sql = _context.SqlDropOutput(_cf);
-                cn.Execute(sql);
+               cn.Execute(_context.SqlDropOutputViewAsTable(_cf));
             } catch (DbException ex) {
-                _context.Warn($"Could not drop output {_context.Entity.OutputTableName(_context.Process.Name)}");
-                _context.Debug(() => ex.Message);
+               _context.Debug(() => ex.Message);
             }
+         }
 
-        }
+         try {
+            var sql = _context.SqlDropOutput(_cf);
+            cn.Execute(sql);
+         } catch (DbException ex) {
+            _context.Warn($"Could not drop output {_context.Entity.OutputTableName(_context.Process.Name)}");
+            _context.Debug(() => ex.Message);
+         }
 
-        private void Create(IDbConnection cn) {
-            var createSql = _context.SqlCreateOutput(_cf);
+      }
+
+      private void Create(IDbConnection cn) {
+         var createSql = _context.SqlCreateOutput(_cf);
+         try {
+            cn.Execute(createSql);
+         } catch (DbException ex) {
+            _context.Error($"Could not create output {_context.Entity.OutputTableName(_context.Process.Name)}");
+            _context.Error(ex, ex.Message);
+         }
+
+         try {
+            var createIndex = _context.SqlCreateOutputUniqueIndex(_cf);
+            cn.Execute(createIndex);
+         } catch (DbException ex) {
+            _context.Error($"Could not create unique index on output {_context.Entity.OutputTableName(_context.Process.Name)}");
+            _context.Error(ex, ex.Message);
+         }
+
+         if (_cf.AdoProvider == AdoProvider.SqlCe)
+            return;
+
+         try {
+            var createView = _context.SqlCreateOutputView(_cf);
+            cn.Execute(createView);
+         } catch (DbException ex) {
+            _context.Error($"Could not create output view {_context.Entity.OutputViewName(_context.Process.Name)}");
+            _context.Error(ex, ex.Message);
+         }
+      }
+
+      public ActionResponse Execute() {
+         using (var cn = _cf.GetConnection()) {
             try {
-                cn.Execute(createSql);
-            } catch (DbException ex) {
-                _context.Error($"Could not create output {_context.Entity.OutputTableName(_context.Process.Name)}");
-                _context.Error(ex, ex.Message);
+               cn.Open();
+            } catch (DbException e) {
+               _context.Error($"Couldn't open {_context.Connection}.");
+               _context.Error(e.Message);
+               return new ActionResponse(500, e.Message) { Action = new Configuration.Action { Type = "internal", ErrorMode = "abort" } };
             }
-
-            try {
-                var createIndex = _context.SqlCreateOutputUniqueIndex(_cf);
-                cn.Execute(createIndex);
-            } catch (DbException ex) {
-                _context.Error($"Could not create unique index on output {_context.Entity.OutputTableName(_context.Process.Name)}");
-                _context.Error(ex, ex.Message);
-            }
-
-            if (_cf.AdoProvider == AdoProvider.SqlCe)
-                return;
-
-            try {
-                var createView = _context.SqlCreateOutputView(_cf);
-                cn.Execute(createView);
-            } catch (DbException ex) {
-                _context.Error($"Could not create output view {_context.Entity.OutputViewName(_context.Process.Name)}");
-                _context.Error(ex, ex.Message);
-            }
-        }
-
-        public ActionResponse Execute() {
-            using (var cn = _cf.GetConnection()) {
-                try {
-                    cn.Open();
-                } catch (DbException e) {
-                    _context.Error($"Couldn't open {_context.Connection}.");
-                    _context.Error(e.Message);
-                    Environment.Exit(1);
-                }
-                Destroy(cn);
-                Create(cn);
-            }
-            return new ActionResponse();
-        }
-    }
+            Destroy(cn);
+            Create(cn);
+         }
+         return new ActionResponse();
+      }
+   }
 }

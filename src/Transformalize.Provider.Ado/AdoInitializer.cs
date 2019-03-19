@@ -17,7 +17,6 @@
 #endregion
 
 using Dapper;
-using System;
 using System.Data;
 using System.Data.Common;
 using Transformalize.Actions;
@@ -26,51 +25,51 @@ using Transformalize.Contracts;
 using Transformalize.Providers.Ado.Ext;
 
 namespace Transformalize.Providers.Ado {
-    public class AdoInitializer : IInitializer {
-        private readonly OutputContext _context;
-        private readonly IConnectionFactory _cf;
+   public class AdoInitializer : IInitializer {
+      private readonly OutputContext _context;
+      private readonly IConnectionFactory _cf;
 
-        public AdoInitializer(OutputContext context, IConnectionFactory cf) {
-            _context = context;
-            _cf = cf;
-        }
+      public AdoInitializer(OutputContext context, IConnectionFactory cf) {
+         _context = context;
+         _cf = cf;
+      }
 
-        private void Destroy(IDbConnection cn) {
+      private void Destroy(IDbConnection cn) {
+         try {
+            if (!_context.Connection.DropControl)
+               return;
+
+            var sql = _context.SqlDropControl(_cf);
+            cn.Execute(sql);
+         } catch (DbException ex) {
+            _context.Debug(() => ex.Message);
+         }
+      }
+
+      private void Create(IDbConnection cn) {
+         try {
+            var sql = _context.SqlCreateControl(_cf);
+            cn.Execute(sql);
+         } catch (DbException ex) {
+            _context.Debug(() => ex.Message);
+         }
+      }
+
+      public ActionResponse Execute() {
+         using (var cn = _cf.GetConnection()) {
             try {
-                if (!_context.Connection.DropControl)
-                    return;
-
-                var sql = _context.SqlDropControl(_cf);
-                cn.Execute(sql);
+               cn.Open();
             } catch (DbException ex) {
-                _context.Debug(() => ex.Message);
+               _context.Error($"Couldn't open {_context.Connection}.");
+               _context.Error(ex.Message);
+               return new ActionResponse(500, ex.Message) { Action = new Configuration.Action { Type = "internal", ErrorMode = "abort" } };
             }
-        }
 
-        private void Create(IDbConnection cn) {
-            try {
-                var sql = _context.SqlCreateControl(_cf);
-                cn.Execute(sql);
-            } catch (DbException ex) {
-                _context.Debug(() => ex.Message);
-            }
-        }
-
-        public ActionResponse Execute() {
-            using (var cn = _cf.GetConnection()) {
-                try {
-                    cn.Open();
-                } catch (DbException ex) {
-                    _context.Error($"Couldn't open {_context.Connection}.");
-                    _context.Error(ex.Message);
-                    Environment.Exit(1);
-                }
-
-                Destroy(cn);
-                Create(cn);
-            }
-            return new ActionResponse();
-        }
-    }
+            Destroy(cn);
+            Create(cn);
+         }
+         return new ActionResponse();
+      }
+   }
 
 }

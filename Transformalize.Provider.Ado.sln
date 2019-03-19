@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Transform.Ad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Transform.Ado.Autofac", "src\Transformalize.Transform.Ado.Autofac\Transformalize.Transform.Ado.Autofac.csproj", "{87D6BE79-CBF7-4D2E-81EF-C4413A128810}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "src\Benchmark\Benchmark.csproj", "{407C2F17-0789-4840-BB18-642F2B7E40AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{87D6BE79-CBF7-4D2E-81EF-C4413A128810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D6BE79-CBF7-4D2E-81EF-C4413A128810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87D6BE79-CBF7-4D2E-81EF-C4413A128810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{407C2F17-0789-4840-BB18-642F2B7E40AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{407C2F17-0789-4840-BB18-642F2B7E40AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{407C2F17-0789-4840-BB18-642F2B7E40AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{407C2F17-0789-4840-BB18-642F2B7E40AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
