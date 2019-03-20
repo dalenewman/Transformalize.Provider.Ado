@@ -1,4 +1,4 @@
-﻿<add name='bogus' mode='default'>
+﻿<add name='bogus' mode='init'>
    <parameters>
       <add name='Size' type='int' value='10' />
       <add name='Provider' value='internal' />
@@ -11,7 +11,7 @@
       <add name='output' provider='@[Provider]' database='junk' user='@[User]' password='@[Password]' file='@[File]' />
    </connections>
    <entities>
-      <add name='Contact' size='@[Size]' update='false'>
+      <add name='Contact' size='@[Size]'>
          <fields>
             <add name='FirstName' />
             <add name='LastName' />

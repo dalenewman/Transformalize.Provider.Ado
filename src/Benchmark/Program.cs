@@ -18,8 +18,8 @@ namespace Benchmark {
    public class Benchmarks {
 
       public IPipelineLogger Logger = new Transformalize.Logging.NLog.NLogPipelineLogger("test");
-      private const int Size = 5000;
-      private const string Password = "devdev1!";
+      private const int Size = 1000;
+      private const string Password = "*";
 
       [Benchmark(Baseline = true, Description = "bogus rows into memory")]
       public void BaseLine() {
@@ -54,20 +54,9 @@ namespace Benchmark {
          }
       }
 
-      [Benchmark(Baseline = false, Description = "bogus rows into sqlite")]
-      public void Sqlite() {
-         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=sqlite&File=c:\temp\junk.sqlite")) {
-            var process = outer.Resolve<Process>();
-            using (var inner = new TestContainer(new BogusModule(), new SqliteModule()).CreateScope(process, Logger)) {
-               var controller = inner.Resolve<IProcessController>();
-               controller.Execute();
-            }
-         }
-      }
-
       [Benchmark(Baseline = false, Description = "bogus rows into sqlce")]
       public void SqlCe() {
-         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=sqlce&File=c:\temp\junk.sdf")) {
+         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=sqlce&File=d:\temp\junk.sdf")) {
             var process = outer.Resolve<Process>();
             using (var inner = new TestContainer(new BogusModule(), new SqlCeModule()).CreateScope(process, Logger)) {
                var controller = inner.Resolve<IProcessController>();
@@ -81,6 +70,17 @@ namespace Benchmark {
          using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=mysql&User=root&Password={Password}")) {
             var process = outer.Resolve<Process>();
             using (var inner = new TestContainer(new BogusModule(), new MySqlModule()).CreateScope(process, Logger)) {
+               var controller = inner.Resolve<IProcessController>();
+               controller.Execute();
+            }
+         }
+      }
+
+      [Benchmark(Baseline = false, Description = "bogus rows into sqlite")]
+      public void Sqlite() {
+         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=sqlite&File=d:\temp\junk.sqlite")) {
+            var process = outer.Resolve<Process>();
+            using (var inner = new TestContainer(new BogusModule(), new SqliteModule()).CreateScope(process, Logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
