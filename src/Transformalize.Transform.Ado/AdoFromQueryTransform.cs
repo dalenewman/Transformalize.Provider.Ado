@@ -47,7 +47,7 @@ namespace Transformalize.Transforms.Ado {
 
             // map parameters to ado parameters and set values
             if (query.Contains("@")) {
-                var active = Context.Process.GetActiveParameters();
+                var active = Context.Process.Parameters;
                 foreach (var parameter in active) {
                     if (parameter.Name.Contains(".")) {
                         parameter.Name = parameter.Name.Replace(".", "_");

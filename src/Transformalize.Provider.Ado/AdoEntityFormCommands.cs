@@ -49,7 +49,7 @@ namespace Transformalize.Providers.Ado {
                 }
             }
 
-            foreach (var parameter in c.Process.GetActiveParameters().Where(p => !string.IsNullOrEmpty(p.Name) && p.Input)) {
+            foreach (var parameter in c.Process.Parameters.Where(p => !string.IsNullOrEmpty(p.Name) && p.Input)) {
                 var name = parameter.Name.Replace(".", "_");
 
                 if (added.Add(name)) {
@@ -70,7 +70,7 @@ namespace Transformalize.Providers.Ado {
                 added.Add(field.Name);
             }
 
-            foreach (var parameter in c.Process.GetActiveParameters().Where(p => !string.IsNullOrEmpty(p.Name) && p.Input && p.Scope != "update")) {
+            foreach (var parameter in c.Process.Parameters.Where(p => !string.IsNullOrEmpty(p.Name) && p.Input && p.Scope != "update")) {
                 var name = parameter.Name.Replace(".", "_");
                 if (!keys.Contains(name) && added.Add(name)) {
                     fields.Add(new Field { Name = name, Type = parameter.Type, Alias = name });
@@ -91,7 +91,7 @@ namespace Transformalize.Providers.Ado {
                 added.Add(field.Name);
             }
 
-            foreach (var parameter in c.Process.GetActiveParameters().Where(p => !string.IsNullOrEmpty(p.Name) && p.Input && p.Scope != "insert")) {
+            foreach (var parameter in c.Process.Parameters.Where(p => !string.IsNullOrEmpty(p.Name) && p.Input && p.Scope != "insert")) {
                 var name = parameter.Name.Replace(".", "_");
                 if (!keys.Contains(name) && added.Add(name)) {
                     fields.Add(new Field { Name = name, Type = parameter.Type });

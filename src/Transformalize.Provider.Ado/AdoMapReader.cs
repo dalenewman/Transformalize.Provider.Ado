@@ -63,7 +63,7 @@ namespace Transformalize.Providers.Ado {
                 if (cmd.CommandText.Contains("@")) {
                     var parameters = new ExpandoObject();
                     var editor = (IDictionary<string, object>)parameters;
-                    var active = _context.Process.GetActiveParameters();
+                    var active = _context.Process.Parameters;
                     foreach (var name in new AdoParameterFinder().Find(cmd.CommandText).Distinct().ToList()) {
                         var match = active.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                         if (match != null) {

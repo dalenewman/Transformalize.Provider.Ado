@@ -24,6 +24,7 @@ using System.Data.Common;
 using System.Dynamic;
 using System.Linq;
 using Transformalize.Actions;
+using Transformalize.Configuration;
 using Transformalize.Contracts;
 using Transformalize.Extensions;
 
@@ -70,14 +71,13 @@ namespace Transformalize.Providers.Ado.Actions {
                     if (_node.Command.Contains("@")) {
                         var parameters = new ExpandoObject();
                         var editor = (IDictionary<string, object>)parameters;
-                        var active = _context.Process.GetActiveParameters();
-                        foreach (var parameter in active) {
+                       foreach (var parameter in _context.Process.Parameters) {
                             if (parameter.Name.Contains(".")) {
                                 parameter.Name = parameter.Name.Replace(".", "_");
                             }
                         }
                         foreach (var name in new AdoParameterFinder().Find(_node.Command).Distinct().ToList()) {
-                            var match = active.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                            var match = _context.Process.Parameters.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                             if (match != null) {
                                 editor[match.Name] = match.Convert(match.Value);
                             }

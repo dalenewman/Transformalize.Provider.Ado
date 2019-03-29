@@ -97,7 +97,7 @@ namespace Transformalize.Providers.Ado {
 
                 // handle ado parameters
                 if (cmd.CommandText.Contains("@")) {
-                    var active = _input.Process.GetActiveParameters();
+                    var active = _input.Process.Parameters;
                     foreach (var name in new AdoParameterFinder().Find(cmd.CommandText).Distinct().ToList()) {
                         var match = active.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
                         if (match != null) {
