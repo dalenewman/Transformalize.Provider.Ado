@@ -23,32 +23,33 @@ using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Ado {
 
-    public class AdoStarController : IOutputController {
+   public class AdoStarController : IOutputController {
 
-        readonly Stopwatch _stopWatch;
-        readonly OutputContext _context;
-        readonly IEnumerable<IAction> _actions;
+      readonly Stopwatch _stopWatch;
+      readonly OutputContext _context;
+      readonly IEnumerable<IAction> _actions;
 
-        public AdoStarController(OutputContext context, IEnumerable<IAction> actions) {
-            _context = context;
-            _actions = actions;
-            _stopWatch = new Stopwatch();
-        }
+      public AdoStarController(OutputContext context, IEnumerable<IAction> actions) {
+         _context = context;
+         _actions = actions;
+         _stopWatch = new Stopwatch();
+      }
 
-        public void Initialize() {
-            foreach (var action in _actions) {
-                _context.Debug(() => $"Initializing with {action.GetType().Name}");
-                action.Execute();
-            }
-        }
+      public ActionResponse Initialize() {
+         foreach (var action in _actions) {
+            _context.Debug(() => $"Initializing with {action.GetType().Name}");
+            action.Execute();
+         }
+         return new ActionResponse();  //for now
+      }
 
-        public void Start() {
-            _stopWatch.Start();
-        }
+      public void Start() {
+         _stopWatch.Start();
+      }
 
-        public void End() {
-            _stopWatch.Stop();
-            _context.Debug(()=>$"Star process ending: {_stopWatch.Elapsed}");
-        }
-    }
+      public void End() {
+         _stopWatch.Stop();
+         _context.Debug(() => $"Star process ending: {_stopWatch.Elapsed}");
+      }
+   }
 }
