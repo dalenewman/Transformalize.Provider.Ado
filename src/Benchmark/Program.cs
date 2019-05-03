@@ -13,6 +13,7 @@ using Transformalize.Providers.SqlServer.Autofac;
 
 namespace Benchmark {
 
+   [MemoryDiagnoser]
    [LegacyJitX64Job]
    public class Benchmarks {
 
