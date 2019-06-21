@@ -2,20 +2,20 @@
 <package>
   <metadata>
     <id>Transformalize.Transform.Ado.Autofac</id>
-    <version>0.6.4-beta</version>
+    <version>0.6.9-beta</version>
     <title>Transformalize ADO based transforms</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>updated exception handling</description>
-    <releaseNotes>target 462</releaseNotes>
+    <description>Transformalize Transform using ADO</description>
+    <releaseNotes>updated dependencies</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="net462">
         <dependency id="Autofac" version="4.6.2" />
-        <dependency id="Transformalize.Transform.Ado" version="0.6.4-beta" />
+        <dependency id="Transformalize.Transform.Ado" version="0.6.9-beta" />
       </group>
     </dependencies>
   </metadata>
