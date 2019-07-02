@@ -2,14 +2,14 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado</id>
-    <version>0.6.9-beta</version>
+    <version>0.6.10-beta</version>
     <title>Transformalize Provider using ADO</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Transformalize Transform using ADO</description>
-    <releaseNotes>updated dependencies</releaseNotes>
+    <description>common ado provider stuff module</description>
+    <releaseNotes>added ado style parameter support when paging with filters</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
     <dependencies>
