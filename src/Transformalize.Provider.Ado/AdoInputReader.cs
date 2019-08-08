@@ -118,12 +118,21 @@ namespace Transformalize.Providers.Ado {
                   _input.Warn($"The reader is returning {reader.FieldCount} fields, but the entity {_input.Entity.Alias} expects {_fields.Length}!");
                }
 
-               // just read
-               while (reader.Read()) {
-                  _rowCount++;
-                  yield return _rowCreator.Create(reader, _fields);
+               if (_input.Connection.Buffer) {
+                  var buffer = new List<IRow>();
+                  while (reader.Read()) {
+                     _rowCount++;
+                     buffer.Add(_rowCreator.Create(reader, _fields));
+                  }
+                  foreach(var row in buffer) {
+                     yield return row;
+                  }
+               } else {
+                  while (reader.Read()) {
+                     _rowCount++;
+                     yield return _rowCreator.Create(reader, _fields);
+                  }
                }
-
             }
          }
 
