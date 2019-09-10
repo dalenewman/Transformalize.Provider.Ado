@@ -20,12 +20,12 @@ using System.Data;
 using Transformalize.Configuration;
 
 namespace Transformalize.Providers.Ado {
-    public interface IConnectionFactory {
-        IDbConnection GetConnection(string appName = null);
-        string GetConnectionString(string appName = null);
-        string Enclose(string name);
-        string SqlDataType(Field field);
-        AdoProvider AdoProvider { get; }
-        string Terminator { get; }
-    }
+   public interface IConnectionFactory {
+      IDbConnection GetConnection(string appName = null);
+      string GetConnectionString(string appName = null);
+      string Enclose(string name);
+      string SqlDataType(Field field);
+      AdoProvider AdoProvider { get; }
+      string Terminator { get; }
+   }
 }

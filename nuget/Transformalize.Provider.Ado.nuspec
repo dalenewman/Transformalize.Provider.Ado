@@ -2,19 +2,19 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado</id>
-    <version>0.6.12-beta</version>
+    <version>0.6.16-beta</version>
     <title>Transformalize Provider using ADO</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>common ado provider stuff module</description>
-    <releaseNotes>added ado style parameter support when paging with filters</releaseNotes>
+    <releaseNotes>add ignore-value to filter (defaulted to *)</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="net462">
-        <dependency id="Transformalize" version="0.6.11-beta" />
+        <dependency id="Transformalize" version="0.6.15-beta" />
         <dependency id="Dapper" version="1.60.6" />
       </group>
     </dependencies>

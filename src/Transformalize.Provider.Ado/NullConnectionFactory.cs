@@ -20,25 +20,25 @@ using System.Data;
 using Transformalize.Configuration;
 
 namespace Transformalize.Providers.Ado {
-    public class NullConnectionFactory : IConnectionFactory {
-        public AdoProvider AdoProvider { get; } = AdoProvider.None;
-        public string Terminator { get; } = string.Empty;
+   public class NullConnectionFactory : IConnectionFactory {
+      public AdoProvider AdoProvider { get; } = AdoProvider.None;
+      public string Terminator { get; } = string.Empty;
 
-        public IDbConnection GetConnection(string appName = null) {
-            return null;
-        }
+      public IDbConnection GetConnection(string appName = null) {
+         return null;
+      }
 
-        public string GetConnectionString(string appName = null) {
-            return string.Empty;
-        }
+      public string GetConnectionString(string appName = null) {
+         return string.Empty;
+      }
 
-        public string SqlDataType(Field field) {
-            return string.Empty;
-        }
+      public string SqlDataType(Field field) {
+         return string.Empty;
+      }
 
-        public string Enclose(string name) {
-            return name;
-        }
+      public string Enclose(string name) {
+         return name;
+      }
 
-    }
+   }
 }

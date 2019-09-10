@@ -29,6 +29,8 @@ using Transformalize.Extensions;
 namespace Transformalize.Providers.Ado.Ext {
    public static class AdoExtensions {
 
+      public static char TextQualifier = '\'';
+
       public static string SqlControlTableName(this OutputContext c) {
          return Utility.Identifier(c.Process.Name) + "Control";
       }
@@ -41,7 +43,7 @@ namespace Transformalize.Providers.Ado.Ext {
          var d = field.Default == Constants.DefaultSetting ? Constants.StringDefaults()[field.Type] : field.Default;
 
          if (AdoConstants.StringTypes.Any(t => t == field.Type)) {
-            return "'" + d + "'";
+            return TextQualifier + d + TextQualifier;
          }
 
          if (!field.Type.StartsWith("bool", StringComparison.Ordinal))
@@ -98,11 +100,11 @@ namespace Transformalize.Providers.Ado.Ext {
       public static string SqlSelectInput(this InputContext c, Field[] fields, IConnectionFactory cf) {
          var fieldList = string.Join(",", fields.Select(f => cf.Enclose(f.Name)));
          var table = SqlInputName(c, cf);
-         var filter = c.Entity.Filter.Any() ? " WHERE " + c.ResolveFilter(cf) : string.Empty;
+         var filter = c.Entity.Filter.Any() ? "WHERE " + c.ResolveFilter(cf) : string.Empty;
          var orderBy = c.ResolveOrder(cf);
 
          if (!c.Entity.IsPageRequest())
-            return $"SELECT {(c.Entity.Distinct ? "DISTINCT " : string.Empty)}{fieldList} FROM {SqlInputName(c, cf)} {filter} {orderBy}";
+            return $"SELECT {(c.Entity.Distinct ? "DISTINCT " : string.Empty)}{fieldList} FROM {table} {filter} {orderBy}".TrimEnd(' ');
 
          var start = (c.Entity.Page * c.Entity.Size) - c.Entity.Size;
          var end = start + c.Entity.Size;
@@ -248,6 +250,13 @@ FROM (
          var view = c.Entity.OutputViewName(c.Process.Name);
          var index = cf.Enclose($"IX_{view}_Batch");
          return $"CREATE INDEX {index} ON {cf.Enclose(table)}({cf.Enclose(c.Entity.TflBatchId().FieldName())})";
+      }
+
+      public static string SqlCreateBatchIndexOnFlat(this OutputContext c, IConnectionFactory cf) {
+         var flat = c.Process.Name + c.Process.FlatSuffix;
+         var tableName = cf.Enclose(flat);
+         var indexName = cf.Enclose($"IX_{flat}_Batch");
+         return $"CREATE INDEX {indexName} ON {tableName}({cf.Enclose(c.Entity.TflBatchId().Name)} DESC)";
       }
 
       public static string SqlDropOutputView(this OutputContext c, IConnectionFactory cf) {

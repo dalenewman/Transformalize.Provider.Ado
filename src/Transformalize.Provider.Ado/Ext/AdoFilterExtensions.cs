@@ -26,116 +26,121 @@ using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Ado.Ext {
 
-    public static class SqlFilterExtensions {
+   public static class SqlFilterExtensions {
 
-        public static string ResolveFilter(this IContext c, IConnectionFactory factory) {
+      public static char TextQualifier = '\'';
 
-            var builder = new StringBuilder("(");
-            var last = c.Entity.Filter.Count - 1;
+      public static string ResolveFilter(this IContext c, IConnectionFactory factory) {
 
-            for (var i = 0; i < c.Entity.Filter.Count; i++) {
-                var filter = c.Entity.Filter[i];
-                builder.Append(ResolveExpression(c, filter, factory));
-                if (i >= last) continue;
-                builder.Append(" ");
-                builder.Append(filter.Continuation);
-                builder.Append(" ");
+         var builder = new StringBuilder("(");
+         var last = c.Entity.Filter.Count - 1;
+
+         for (var i = 0; i < c.Entity.Filter.Count; i++) {
+            var filter = c.Entity.Filter[i];
+            var expression = ResolveExpression(c, filter, factory);
+            if (expression != string.Empty) {
+               builder.Append(expression);
+
+               if (i >= last) {
+                  continue;
+               }
+                  
+               builder.Append(" ");
+               builder.Append(filter.Continuation);
+               builder.Append(" ");
             }
+         }
 
-            builder.Append(")");
-            return builder.ToString();
-        }
+         builder.Append(")");
+         return builder.ToString();
+      }
 
-        private static string ResolveExpression(this IContext c, Filter filter, IConnectionFactory factory) {
-            if (!string.IsNullOrEmpty(filter.Expression))
-                return filter.Expression;
+      private static string ResolveExpression(this IContext c, Filter filter, IConnectionFactory factory) {
+         if (!string.IsNullOrEmpty(filter.Expression))
+            return filter.Expression;
 
-            var builder = new StringBuilder();
-            var rightSide = ResolveSide(filter, "right", factory);
-            var resolvedOperator = ResolveOperator(filter.Operator);
-            if (rightSide.Equals("NULL")) {
-                if (filter.Operator == "=") {
-                    resolvedOperator = "IS";
-                }
-                if (filter.Operator == "!=") {
-                    resolvedOperator = "IS NOT";
-                }
+         var builder = new StringBuilder();
+         var rightSide = ResolveSide(filter, "right", factory);
+         var resolvedOperator = ResolveOperator(filter.Operator);
+
+         if (rightSide == $"{TextQualifier}{filter.IgnoreValue}{TextQualifier}" && filter.Operator == "equal") {
+            return string.Empty;  // ignore this filter
+         }
+
+         builder.Append(ResolveSide(filter, "left", factory));
+         builder.Append(" ");
+         builder.Append(resolvedOperator);
+         builder.Append(" ");
+         builder.Append(rightSide);
+
+         return builder.ToString();
+      }
+
+      private static string ResolveSide(Filter filter, string side, IConnectionFactory factory) {
+
+         bool isField;
+         string value;
+         bool otherIsField;
+         Field otherField;
+
+         if (side == "left") {
+            isField = filter.IsField;
+            value = filter.Field;
+            otherIsField = filter.ValueIsField;
+            otherField = filter.ValueField;
+         } else {
+            isField = filter.ValueIsField;
+            value = filter.Value;
+            otherIsField = filter.IsField;
+            otherField = filter.LeftField;
+         }
+
+         if (isField)
+            return factory.Enclose(value);
+
+         if (value.Equals("null", StringComparison.OrdinalIgnoreCase))
+            return "NULL";
+
+         if (!otherIsField) {
+            double number;
+            if (double.TryParse(value, out number)) {
+               return number.ToString(CultureInfo.InvariantCulture);
             }
+            return TextQualifier + value + TextQualifier;
+         }
 
-            builder.Append(ResolveSide(filter, "left", factory));
-            builder.Append(" ");
-            builder.Append(resolvedOperator);
-            builder.Append(" ");
-            builder.Append(rightSide);
+         if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
+            return TextQualifier + value + TextQualifier;
+         }
+         return value;
+      }
 
-            return builder.ToString();
-        }
+      private static string ResolveOperator(string op) {
+         switch (op) {
+            case "equal":
+               return "=";
+            case "greaterthan":
+               return ">";
+            case "greaterthanequal":
+               return ">=";
+            case "lessthan":
+               return "<";
+            case "lessthanequal":
+               return "<=";
+            case "notequal":
+               return "!=";
+            default:
+               return "=";
+         }
 
-        private static string ResolveSide(Filter filter, string side, IConnectionFactory factory) {
+      }
 
-            bool isField;
-            string value;
-            bool otherIsField;
-            Field otherField;
-
-            if (side == "left") {
-                isField = filter.IsField;
-                value = filter.Field;
-                otherIsField = filter.ValueIsField;
-                otherField = filter.ValueField;
-            } else {
-                isField = filter.ValueIsField;
-                value = filter.Value;
-                otherIsField = filter.IsField;
-                otherField = filter.LeftField;
-            }
-
-            if (isField)
-                return factory.Enclose(value);
-
-            if (value.Equals("null", StringComparison.OrdinalIgnoreCase))
-                return "NULL";
-
-            if (!otherIsField) {
-                double number;
-                if (double.TryParse(value, out number)) {
-                    return number.ToString(CultureInfo.InvariantCulture);
-                }
-                return "'" + value + "'";
-            }
-
-            if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
-                return "'" + value + "'";
-            }
-            return value;
-        }
-
-        private static string ResolveOperator(string op) {
-            switch (op) {
-                case "equal":
-                    return "=";
-                case "greaterthan":
-                    return ">";
-                case "greaterthanequal":
-                    return ">=";
-                case "lessthan":
-                    return "<";
-                case "lessthanequal":
-                    return "<=";
-                case "notequal":
-                    return "!=";
-                default:
-                    return "=";
-            }
-
-        }
-
-        public static string ResolveOrder(this InputContext context, IConnectionFactory cf) {
-            if (!context.Entity.Order.Any())
-                return string.Empty;
-            var orderBy = string.Join(", ", context.Entity.Order.Select(o => $"{cf.Enclose(o.Field)} {o.Sort.ToUpper()}"));
-            context.Debug(() => $"ORDER: {orderBy}");
-            return $" ORDER BY {orderBy}";
-        }
-    }
+      public static string ResolveOrder(this InputContext context, IConnectionFactory cf) {
+         if (!context.Entity.Order.Any())
+            return string.Empty;
+         var orderBy = string.Join(", ", context.Entity.Order.Select(o => $"{cf.Enclose(o.Field)} {o.Sort.ToUpper()}"));
+         context.Debug(() => $"ORDER: {orderBy}");
+         return $" ORDER BY {orderBy}";
+      }
+   }
 }

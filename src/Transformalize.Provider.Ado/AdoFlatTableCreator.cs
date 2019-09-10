@@ -24,31 +24,33 @@ using Transformalize.Contracts;
 using Transformalize.Providers.Ado.Ext;
 
 namespace Transformalize.Providers.Ado {
-    public class AdoFlatTableCreator : IAction {
-        private readonly OutputContext _output;
-        private readonly IConnectionFactory _cf;
+   public class AdoFlatTableCreator : IAction {
+      private readonly OutputContext _output;
+      private readonly IConnectionFactory _cf;
 
-        public AdoFlatTableCreator(OutputContext output, IConnectionFactory cf) {
-            _output = output;
-            _cf = cf;
-        }
+      public AdoFlatTableCreator(OutputContext output, IConnectionFactory cf) {
+         _output = output;
+         _cf = cf;
+      }
 
-        public ActionResponse Execute() {
-            var drop = _output.SqlDropFlatTable(_cf);
-            var create = _output.SqlCreateFlatTable(_cf);
-            var createIndex = _output.SqlCreateFlatIndex(_cf);
+      public ActionResponse Execute() {
+         var drop = _output.SqlDropFlatTable(_cf);
+         var create = _output.SqlCreateFlatTable(_cf);
+         var createIndex = _output.SqlCreateFlatIndex(_cf);
+         var createBatchIndex = _output.SqlCreateBatchIndexOnFlat(_cf);
 
-            using (var cn = _cf.GetConnection()) {
-                cn.Open();
-                try {
-                    cn.Execute(drop);
-                } catch (DbException ex) {
-                    _output.Debug(() => ex.Message);
-                }
-                cn.Execute(create);
-                cn.Execute(createIndex);
+         using (var cn = _cf.GetConnection()) {
+            cn.Open();
+            try {
+               cn.Execute(drop);
+            } catch (DbException ex) {
+               _output.Debug(() => ex.Message);
             }
-            return new ActionResponse();
-        }
-    }
+            cn.Execute(create);
+            cn.Execute(createIndex);
+            cn.Execute(createBatchIndex);
+         }
+         return new ActionResponse();
+      }
+   }
 }
