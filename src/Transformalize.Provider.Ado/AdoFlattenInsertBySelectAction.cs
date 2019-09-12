@@ -16,6 +16,7 @@
 // limitations under the License.
 #endregion
 
+using System.Data;
 using System.Data.Common;
 using System.Text;
 using Dapper;
@@ -26,55 +27,53 @@ using Transformalize.Extensions;
 using Transformalize.Providers.Ado.Ext;
 
 namespace Transformalize.Providers.Ado {
-    public class AdoFlattenInsertBySelectAction : IAction {
+   public class AdoFlattenInsertBySelectAction : IAction {
 
-        private readonly OutputContext _output;
-        private readonly IConnectionFactory _cf;
-        private readonly AdoSqlModel _model;
+      private readonly OutputContext _output;
+      private readonly IConnectionFactory _cf;
+      private readonly AdoSqlModel _model;
+      private readonly IDbTransaction _trans;
+      private readonly IDbConnection _cn;
 
-        public AdoFlattenInsertBySelectAction(OutputContext output, IConnectionFactory cf, AdoSqlModel model) {
-            _output = output;
-            _cf = cf;
-            _model = model;
-        }
+      public AdoFlattenInsertBySelectAction(OutputContext output, IConnectionFactory cf, AdoSqlModel model, IDbConnection cn, IDbTransaction trans) {
+         _output = output;
+         _cf = cf;
+         _model = model;
+         _trans = trans;
+         _cn = cn;
+      }
 
-        public ActionResponse Execute() {
+      public ActionResponse Execute() {
 
-            var masterAlias = Utility.GetExcelName(_model.MasterEntity.Index);
-            var builder = new StringBuilder();
-            builder.AppendLine($"INSERT INTO {_model.Flat}({string.Join(",", _model.Aliases)})");
-            builder.AppendLine($"SELECT {_output.SqlStarFields(_cf)}");
+         var masterAlias = Utility.GetExcelName(_model.MasterEntity.Index);
+         var builder = new StringBuilder();
+         builder.AppendLine($"INSERT INTO {_model.Flat}({string.Join(",", _model.Aliases)})");
+         builder.AppendLine($"SELECT {_output.SqlStarFields(_cf)}");
 
-            var close = _cf.AdoProvider != AdoProvider.Access ? string.Empty : ")";
+         var close = _cf.AdoProvider != AdoProvider.Access ? string.Empty : ")";
 
-            foreach (var from in _output.SqlStarFroms(_cf)) {
-                builder.AppendLine(@from);
-            }
+         foreach (var from in _output.SqlStarFroms(_cf)) {
+            builder.AppendLine(@from);
+         }
 
-            builder.AppendLine($"LEFT OUTER JOIN {_cf.Enclose(_output.Process.Name + _output.Process.FlatSuffix)} flat ON (flat.{_model.EnclosedKeyLongName} = {masterAlias}.{_model.EnclosedKeyShortName}){close}");
-            builder.AppendLine($" WHERE flat.{_model.EnclosedKeyLongName} IS NULL AND {masterAlias}.{_model.Batch} > @Threshold; ");
+         builder.AppendLine($"LEFT OUTER JOIN {_cf.Enclose(_output.Process.Name + _output.Process.FlatSuffix)} flat ON (flat.{_model.EnclosedKeyLongName} = {masterAlias}.{_model.EnclosedKeyShortName}){close}");
+         builder.AppendLine($" WHERE flat.{_model.EnclosedKeyLongName} IS NULL AND {masterAlias}.{_model.Batch} > @Threshold; ");
 
-            var command = builder.ToString();
+         var command = builder.ToString();
 
+         if (_cn.State != ConnectionState.Open) {
+            _cn.Open();
+         }
 
-            using (var cn = _cf.GetConnection()) {
-                cn.Open();
-                var trans = cn.BeginTransaction();
+         try {
+            _output.Debug(() => command);
+            var count = _model.Threshold > 0 ? _cn.Execute(command, new { _model.Threshold }, commandTimeout: 0, transaction: _trans) : _cn.Execute(command, commandTimeout: 0, transaction: _trans);
+            _output.Info($"{count} record{count.Plural()} inserted into flat");
+         } catch (DbException ex) {
+            return new ActionResponse(500, ex.Message);
+         }
 
-                try {
-                    _output.Debug(() => command);
-                    var count = _model.Threshold > 0 ? cn.Execute(command, new { _model.Threshold }, commandTimeout: 0, transaction: trans) : cn.Execute(command, commandTimeout: 0, transaction: trans);
-                    _output.Info($"{count} record{count.Plural()} inserted into flat");
-
-                    trans.Commit();
-                } catch (DbException ex) {
-                    trans.Rollback();
-                    return new ActionResponse(500, ex.Message);
-                }
-
-            }
-
-            return new ActionResponse(200, "Ok");
-        }
-    }
+         return new ActionResponse(200, "Ok");
+      }
+   }
 }

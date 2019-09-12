@@ -18,7 +18,6 @@
 
 using System.Linq;
 using System.Text;
-using Transformalize.Actions;
 using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
@@ -26,88 +25,119 @@ using Transformalize.Providers.Ado.Ext;
 
 namespace Transformalize.Providers.Ado {
 
-    public class AdoFlattenAction : IAction {
+   public class AdoFlattenAction : IAction {
 
-        private readonly OutputContext _output;
-        private readonly IConnectionFactory _cf;
+      private readonly OutputContext _output;
+      private readonly IConnectionFactory _cf;
 
-        public AdoFlattenAction(OutputContext output, IConnectionFactory cf) {
-            _output = output;
-            _cf = cf;
-        }
+      public AdoFlattenAction(OutputContext output, IConnectionFactory cf) {
+         _output = output;
+         _cf = cf;
+      }
 
-        public ActionResponse Execute() {
-            if (_output.Process.Entities.Sum(e => e.Inserts + e.Updates + e.Deletes) == 0) {
-                return new ActionResponse(200, "nothing to flatten");
-            }
+      public ActionResponse Execute() {
 
-            var model = new AdoSqlModel(_output, _cf);
+         if (_output.Process.Entities.Sum(e => e.Inserts + e.Updates + e.Deletes) == 0) {
+            return new ActionResponse(200, "nothing to flatten");
+         }
 
-            if (model.MasterEntity.Inserts > 0) {
+         var model = new AdoSqlModel(_output, _cf);
+         ActionResponse updateResponse = null;
+         ActionResponse insertResponse = null;
 
-                if (_output.Process.Mode == "init") {
-                    return new AdoFlattenFirstRunAction(_output, _cf, model).Execute();
-                }
+         using (var cn = _cf.GetConnection(Constants.ApplicationName)) {
+            cn.Open();
 
-                if (_cf.AdoProvider == AdoProvider.SqlCe) {
-                    var insertAction = new AdoFlattenInsertBySelectAction(_output, _cf, model);
-                    var insertResponse = insertAction.Execute();
-                    insertResponse.Action = new Action {
+            using (var trans = cn.BeginTransaction()) {
+
+               _output.Info("Begin Flat Insert/Update Transaction");
+
+               if (model.MasterEntity.Inserts > 0) {
+
+                  if (_output.Process.Mode == "init") {
+                     return new AdoFlattenFirstRunAction(_output, _cf, model).Execute();
+                  }
+
+                  if (_cf.AdoProvider == AdoProvider.SqlCe) {
+                     insertResponse = new AdoFlattenInsertBySelectAction(_output, _cf, model, cn, trans).Execute();
+                     insertResponse.Action = new Action {
                         Type = "internal",
                         Description = "Flatten Action",
                         ErrorMode = "abort"
-                    };
-                    if (insertResponse.Code != 200) {
+                     };
+                     if (insertResponse.Code != 200) {
+                        trans.Rollback();
                         return insertResponse;
-                    }
-                } else {
-                    var insertAction = new AdoFlattenInsertByViewAction(_output, _cf, model);
-                    var insertResponse = insertAction.Execute();
-                    insertResponse.Action = new Action {
+                     }
+                  } else {
+                     insertResponse = new AdoFlattenInsertByViewAction(_output, _cf, model, cn, trans).Execute();
+                     insertResponse.Action = new Action {
                         Type = "internal",
                         Description = "Flatten Action",
                         ErrorMode = "abort"
-                    };
-                    if (insertResponse.Code != 200) {
+                     };
+                     if (insertResponse.Code != 200) {
+                        trans.Rollback();
                         return insertResponse;
-                    }
-                }
+                     }
+                  }
+               }
 
-            }
+               switch (_cf.AdoProvider) {
+                  case AdoProvider.SqlCe:
+                     // this provider does NOT support views, and does NOT support UPDATE ... SET ... FROM ... syntax
 
-            switch (_cf.AdoProvider) {
-                case AdoProvider.SqlCe:
-                    // this provider does NOT support views, and does NOT support UPDATE ... SET ... FROM ... syntax
+                     var masterAlias = Utility.GetExcelName(model.MasterEntity.Index);
+                     var builder = new StringBuilder();
+                     builder.AppendLine($"SELECT {_output.SqlStarFields(_cf)}");
 
-                    var masterAlias = Utility.GetExcelName(model.MasterEntity.Index);
-                    var builder = new StringBuilder();
-                    builder.AppendLine($"SELECT {_output.SqlStarFields(_cf)}");
-
-                    foreach (var from in _output.SqlStarFroms(_cf)) {
+                     foreach (var from in _output.SqlStarFroms(_cf)) {
                         builder.AppendLine(@from);
-                    }
+                     }
 
-                    builder.AppendFormat("INNER JOIN {0} flat ON (flat.{1} = {2}.{3})", _cf.Enclose(_output.Process.Name + _output.Process.FlatSuffix), model.EnclosedKeyLongName, masterAlias, model.EnclosedKeyShortName);
+                     builder.AppendFormat("INNER JOIN {0} flat ON (flat.{1} = {2}.{3})", _cf.Enclose(_output.Process.Name + _output.Process.FlatSuffix), model.EnclosedKeyLongName, masterAlias, model.EnclosedKeyShortName);
 
-                    builder.AppendLine($" WHERE {masterAlias}.{model.Batch} > @Threshold; ");
+                     builder.AppendLine($" WHERE {masterAlias}.{model.Batch} > @Threshold; ");
 
-                    return new AdoFlattenTwoPartUpdateAction(_output, _cf, model, builder.ToString()).Execute();
-                case AdoProvider.SqLite:
+                     //todo: add common cn and trans
+                     updateResponse = new AdoFlattenTwoPartUpdateAction(_output, _cf, model, builder.ToString(), cn, trans).Execute();
+                     break;
+                  case AdoProvider.SqLite:
 
-                    // this provider supports views, but does NOT support UPDATE ... SET ... FROM ... syntax
+                     // this provider supports views, but does NOT support UPDATE ... SET ... FROM ... syntax
 
-                    var sql = $@"
+                     var sql = $@"
                         SELECT s.{string.Join(",s.", model.Aliases)}
                         FROM {model.Master} m
                         INNER JOIN {model.Flat} f ON (f.{model.EnclosedKeyLongName} = m.{model.EnclosedKeyShortName})
                         INNER JOIN {model.Star} s ON (s.{model.EnclosedKeyLongName} = m.{model.EnclosedKeyShortName})
                         WHERE m.{model.Batch} > @Threshold;";
-                    return new AdoFlattenTwoPartUpdateAction(_output, _cf, model, sql).Execute();
-                default:
-                    // these providers support views and UPDATE ... SET ... FROM ... syntax (server based)
-                    return new AdoFlattenUpdateByViewAction(_output, _cf, model).Execute();
-            }
-        }
 
-    }
+                     //todo: add common cn and trans
+                     updateResponse = new AdoFlattenTwoPartUpdateAction(_output, _cf, model, sql, cn, trans).Execute();
+                     break;
+                  default:
+                     // these providers support views and UPDATE ... SET ... FROM ... syntax (server based)
+                     updateResponse = new AdoFlattenUpdateByViewAction(_output, model, cn, trans).Execute();
+                     break;
+               }
+
+               if (updateResponse.Code == 200) {
+                  trans.Commit();
+                  _output.Info("Committed Flat Insert/Update Transaction");
+               } else {
+                  updateResponse.Action = new Action {
+                      Type = "internal",
+                      Description = "Flatten Action",
+                      ErrorMode = "abort"
+                   };
+                  trans.Rollback();
+                  _output.Warn("Rolled Back Flat Insert/Update Transaction");
+               }
+
+               return updateResponse;
+            }
+         }
+      }
+   }
 }

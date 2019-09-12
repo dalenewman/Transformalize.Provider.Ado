@@ -97,6 +97,11 @@ namespace Transformalize.Providers.Ado.Ext {
          return $"SELECT {fieldList} FROM {cf.Enclose(c.Entity.OutputViewName(c.Process.Name))} {filter} {orderBy}";
       }
 
+      public static string SqlSelectFacetFromInput(this InputContext c, Filter f, IConnectionFactory cf) {
+         var filter = c.Entity.Filter.Any() ? "WHERE " + c.ResolveFilter(cf) + " " : string.Empty;
+         return $"SELECT {cf.Enclose(f.LeftField.Name)} + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {c.Entity.Name}{(c.Entity.NoLock ? " WITH (NOLOCK) " : string.Empty)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
+      }
+
       public static string SqlSelectInput(this InputContext c, Field[] fields, IConnectionFactory cf) {
          var fieldList = string.Join(",", fields.Select(f => cf.Enclose(f.Name)));
          var table = SqlInputName(c, cf);
@@ -256,7 +261,7 @@ FROM (
          var flat = c.Process.Name + c.Process.FlatSuffix;
          var tableName = cf.Enclose(flat);
          var indexName = cf.Enclose($"IX_{flat}_Batch");
-         return $"CREATE INDEX {indexName} ON {tableName}({cf.Enclose(c.Entity.TflBatchId().Name)} DESC)";
+         return $"CREATE INDEX {indexName} ON {tableName}({cf.Enclose(Constants.TflBatchId)} DESC)";
       }
 
       public static string SqlDropOutputView(this OutputContext c, IConnectionFactory cf) {

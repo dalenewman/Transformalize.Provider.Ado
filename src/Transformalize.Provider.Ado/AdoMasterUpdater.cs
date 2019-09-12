@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Data.Common;
 using System.Linq;
 using Dapper;
 using Transformalize.Configuration;
@@ -25,40 +26,39 @@ using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Ado {
 
-    public class AdoMasterUpdater : IUpdate {
+   public class AdoMasterUpdater : IUpdate {
 
-        private readonly Entity _master;
-        private readonly OutputContext _output;
-        private readonly IConnectionFactory _cf;
-        private readonly IWriteMasterUpdateQuery _queryWriter;
+      private readonly Entity _master;
+      private readonly OutputContext _output;
+      private readonly IConnectionFactory _cf;
+      private readonly IWriteMasterUpdateQuery _queryWriter;
 
-        public AdoMasterUpdater(OutputContext output, IConnectionFactory cf, IWriteMasterUpdateQuery queryWriter) {
-            _output = output;
-            _cf = cf;
-            _queryWriter = queryWriter;
-            _master = _output.Process.Entities.First(e => e.IsMaster);
-        }
+      public AdoMasterUpdater(OutputContext output, IConnectionFactory cf, IWriteMasterUpdateQuery queryWriter) {
+         _output = output;
+         _cf = cf;
+         _queryWriter = queryWriter;
+         _master = _output.Process.Entities.First(e => e.IsMaster);
+      }
 
-        public void Update()
-        {
-            var status = _output.GetEntityStatus();
-            if (!status.NeedsUpdate())
-                return;
+      public void Update() {
+         var status = _output.GetEntityStatus();
+         if (!status.NeedsUpdate())
+            return;
 
-            using (var cn = _cf.GetConnection()) {
-                cn.Open();
-                var sql = _queryWriter.Write(status);
-                try {
-                    var rowCount = cn.Execute(sql, new {
-                        TflBatchId = _output.Entity.BatchId,
-                        MasterTflBatchId = _master.BatchId
-                    }, null, 0, System.Data.CommandType.Text);
-                    _output.Info(rowCount + " updates to master");
-                } catch (Exception ex) {
-                    _output.Error("error executing: {0}", sql);
-                    _output.Error(ex, ex.Message);
-                }
+         using (var cn = _cf.GetConnection()) {
+            cn.Open();
+            var sql = _queryWriter.Write(status);
+            try {
+               var rowCount = cn.Execute(sql, new {
+                  TflBatchId = _output.Entity.BatchId,
+                  MasterTflBatchId = _master.BatchId
+               }, null, 0, System.Data.CommandType.Text);
+               _output.Info(rowCount + " updates to master");
+            } catch (DbException ex) {
+               _output.Error("error executing: {0}", sql);
+               _output.Error(ex, ex.Message);
             }
-        }
-    }
+         }
+      }
+   }
 }

@@ -16,6 +16,7 @@
 // limitations under the License.
 #endregion
 
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using Dapper;
@@ -26,23 +27,25 @@ using Transformalize.Contracts;
 using Transformalize.Extensions;
 
 namespace Transformalize.Providers.Ado {
-    public class AdoFlattenUpdateByViewAction : IAction {
+   public class AdoFlattenUpdateByViewAction : IAction {
 
-        private readonly OutputContext _output;
-        private readonly IConnectionFactory _cf;
-        private readonly AdoSqlModel _model;
+      private readonly OutputContext _output;
+      private readonly AdoSqlModel _model;
+      private readonly IDbTransaction _trans;
+      private readonly IDbConnection _cn;
 
-        public AdoFlattenUpdateByViewAction(OutputContext output, IConnectionFactory cf, AdoSqlModel model) {
-            _output = output;
-            _cf = cf;
-            _model = model;
-        }
+      public AdoFlattenUpdateByViewAction(OutputContext output, AdoSqlModel model, IDbConnection cn, IDbTransaction trans) {
+         _output = output;
+         _model = model;
+         _cn = cn;
+         _trans = trans;
+      }
 
-        public ActionResponse Execute() {
+      public ActionResponse Execute() {
 
-            var updates = string.Join(", ", _model.Aliases.Where(f => f != _model.EnclosedKeyLongName).Select(f => $"f.{f} = s.{f}"));
+         var updates = string.Join(", ", _model.Aliases.Where(f => f != _model.EnclosedKeyLongName).Select(f => $"f.{f} = s.{f}"));
 
-            var command = $@"
+         var command = $@"
 UPDATE f
 SET {updates}
 FROM {_model.Flat} f
@@ -50,23 +53,19 @@ INNER JOIN {_model.Master} m ON (m.{_model.EnclosedKeyShortName} = f.{_model.Enc
 INNER JOIN {_model.Star} s ON (f.{_model.EnclosedKeyLongName} = s.{_model.EnclosedKeyLongName})
 WHERE m.{_model.Batch} > @Threshold;";
 
-            using (var cn = _cf.GetConnection()) {
-                cn.Open();
-                var trans = cn.BeginTransaction();
+         if(_cn.State != ConnectionState.Open) {
+            _cn.Open();
+         }
 
-                try {
-                    _output.Debug(() => command);
-                    var count = cn.Execute(command, new { _model.Threshold }, commandTimeout: 0, transaction: trans);
-                    _output.Info($"{count} record{count.Plural()} updated in flat");
-                    trans.Commit();
-                } catch (DbException ex) {
-                    trans.Rollback();
-                    return new ActionResponse(500, ex.Message) { Action = new Action { Type = "internal", Description = "Flatten Action", ErrorMode = "abort" } };
-                }
+         try {
+            _output.Debug(() => command);
+            var count = _cn.Execute(command, new { _model.Threshold }, commandTimeout: 0, transaction: _trans);
+            _output.Info($"{count} record{count.Plural()} updated in flat");
+         } catch (DbException ex) {
+            return new ActionResponse(500, ex.Message) { Action = new Action { Type = "internal", Description = "Flatten Action", ErrorMode = "abort" } };
+         }
 
-            }
-
-            return new ActionResponse(200, "Ok");
-        }
-    }
+         return new ActionResponse(200, "Ok");
+      }
+   }
 }

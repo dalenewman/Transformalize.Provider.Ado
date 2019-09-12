@@ -84,6 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestWriteFacetQueries.cs" />
     <Compile Include="TestIgnoreAsterisks.cs" />
     <Compile Include="TestAdoUpdateMasterKeysQueryWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

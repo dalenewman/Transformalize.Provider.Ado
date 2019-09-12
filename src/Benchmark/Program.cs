@@ -43,22 +43,22 @@ namespace Benchmark {
          }
       }
 
-      [Benchmark(Baseline = false, Description = "postgresql")]
-      public void Postgresql() {
-         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=postgresql&User=postgres&Password={Password}", Logger)) {
+      [Benchmark(Baseline = false, Description = "sqlce")]
+      public void SqlCe() {
+         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=sqlce&File=d:\temp\junk.sdf", Logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new Container(new BogusModule(), new PostgreSqlModule()).CreateScope(process, Logger)) {
+            using (var inner = new Container(new BogusModule(), new SqlCeModule()).CreateScope(process, Logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
          }
       }
 
-      [Benchmark(Baseline = false, Description = "sqlce")]
-      public void SqlCe() {
-         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=sqlce&File=d:\temp\junk.sdf", Logger)) {
+      [Benchmark(Baseline = false, Description = "postgresql")]
+      public void Postgresql() {
+         using (var outer = new ConfigurationContainer().CreateScope($@"files\bogus.xml?Size={Size}&Provider=postgresql&User=postgres&Password={Password}", Logger)) {
             var process = outer.Resolve<Process>();
-            using (var inner = new Container(new BogusModule(), new SqlCeModule()).CreateScope(process, Logger)) {
+            using (var inner = new Container(new BogusModule(), new PostgreSqlModule()).CreateScope(process, Logger)) {
                var controller = inner.Resolve<IProcessController>();
                controller.Execute();
             }
