@@ -28,7 +28,6 @@ using Transformalize.Providers.Ado.Ext;
 namespace Transformalize.Providers.Ado.Autofac {
    public class AdoProviderModule : Module {
 
-
       protected override void Load(ContainerBuilder builder) {
 
          if (!builder.Properties.ContainsKey("Process")) {
@@ -65,25 +64,6 @@ namespace Transformalize.Providers.Ado.Autofac {
             var connection = process.Connections.First(cn => cn.Name == map.Connection);
             if (adoProviders.Contains(connection.Provider)) {
                builder.Register<IMapReader>(ctx => new AdoMapReader(ctx.Resolve<IContext>(), ctx.ResolveNamed<IConnectionFactory>(connection.Key), map.Name)).Named<IMapReader>(map.Name);
-            }
-         }
-
-         // automatic facet filter maps need connections and queries and map readers
-         foreach (var entity in process.Entities.Where(e => e.Filter.Any(f => f.Type == "facet"))) {
-            var connection = process.Connections.First(c => c.Name == entity.Connection);
-            if (adoProviders.Contains(connection.Provider)) {
-               foreach (var filter in entity.Filter.Where(f => f.Type == "facet" && f.Map != string.Empty)) {
-                  var map = process.Maps.FirstOrDefault(m => m.Name == filter.Map);
-                  if (!map.Items.Any() && map.Query == string.Empty) {
-                     map.Connection = entity.Connection;
-                     builder.Register<IMapReader>(ctx => {
-                        var input = ctx.ResolveNamed<InputContext>(connection.Key);
-                        var cf = ctx.ResolveNamed<IConnectionFactory>(connection.Key);
-                        map.Query = input.SqlSelectFacetFromInput(filter, cf);
-                        return new AdoMapReader(ctx.Resolve<IContext>(), cf, map.Name);
-                     }).Named<IMapReader>(map.Name);
-                  }
-               }
             }
          }
 

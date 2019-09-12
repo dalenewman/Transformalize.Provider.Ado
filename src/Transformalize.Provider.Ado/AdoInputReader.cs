@@ -61,6 +61,7 @@ namespace Transformalize.Providers.Ado {
             var cmd = cn.CreateCommand();
 
             if (string.IsNullOrEmpty(_input.Entity.Query)) {
+
                if (_input.Entity.MinVersion == null) {
                   cmd.CommandText = _input.SqlSelectInput(_fields, _factory);
                   _input.Debug(() => cmd.CommandText);
@@ -77,7 +78,8 @@ namespace Transformalize.Providers.Ado {
 
                if (_input.Entity.IsPageRequest()) {
                   var countCmd = cn.CreateCommand();
-                  countCmd.CommandText = $"SELECT COUNT(*) FROM {_input.SqlInputName(_factory)} {(_factory.AdoProvider == AdoProvider.SqlServer ? "WITH (NOLOCK)" : string.Empty)} {(_input.Entity.Filter.Any() ? " WHERE " + _input.ResolveFilter(_factory) : string.Empty)}";
+                  var filter = _input.ResolveFilter(_factory);
+                  countCmd.CommandText = $"SELECT COUNT(*) FROM {_input.SqlInputName(_factory)} {(_factory.AdoProvider == AdoProvider.SqlServer ? "WITH (NOLOCK)" : string.Empty)} {(filter == string.Empty ? string.Empty : " WHERE " + filter)}";
                   _input.Debug(() => countCmd.CommandText);
                   AddAdoParameters(countCmd);
                   try {
@@ -97,6 +99,20 @@ namespace Transformalize.Providers.Ado {
                   }
                }
                cmd.CommandText = _input.Entity.Query;
+            }
+
+            if(_input.Process.Mode == "report") {
+               // automatic facet filter maps need connections and queries and map readers
+               foreach(var filter in _input.Entity.Filter.Where(f=>f.Type == "facet" && f.Map != string.Empty)) {
+                  var map = _input.Process.Maps.First(m => m.Name == filter.Map);
+                  if (!map.Items.Any() && map.Query == string.Empty) {
+                     map.Connection = _input.Connection.Name;
+                     map.Query = _input.SqlSelectFacetFromInput(filter, _factory);
+                     foreach(var mapItem in new AdoMapReader(_input, cn, map.Name).Read(_input)) {
+                        map.Items.Add(mapItem);
+                     }
+                  }
+               }
             }
 
             // handle ado parameters

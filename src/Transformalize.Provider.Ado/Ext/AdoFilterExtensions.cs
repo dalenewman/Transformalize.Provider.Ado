@@ -32,11 +32,16 @@ namespace Transformalize.Providers.Ado.Ext {
 
       public static string ResolveFilter(this IContext c, IConnectionFactory factory) {
 
-         var builder = new StringBuilder("(");
+         var builder = new StringBuilder();
          var last = c.Entity.Filter.Count - 1;
 
          for (var i = 0; i < c.Entity.Filter.Count; i++) {
             var filter = c.Entity.Filter[i];
+
+            if (filter.Operator == "equal" && filter.Value == filter.IgnoreValue || filter.Value == $"{TextQualifier}{filter.IgnoreValue}{TextQualifier}") {
+               continue;  // ignore this filter
+            }
+
             var expression = ResolveExpression(c, filter, factory);
             if (expression != string.Empty) {
                builder.Append(expression);
@@ -51,8 +56,9 @@ namespace Transformalize.Providers.Ado.Ext {
             }
          }
 
-         builder.Append(")");
-         return builder.ToString();
+         var result = builder.ToString().Trim(' ');
+         
+         return result == string.Empty ? string.Empty : $"({builder})";
       }
 
       private static string ResolveExpression(this IContext c, Filter filter, IConnectionFactory factory) {
@@ -62,10 +68,6 @@ namespace Transformalize.Providers.Ado.Ext {
          var builder = new StringBuilder();
          var rightSide = ResolveSide(filter, "right", factory);
          var resolvedOperator = ResolveOperator(filter.Operator);
-
-         if (rightSide == $"{TextQualifier}{filter.IgnoreValue}{TextQualifier}" && filter.Operator == "equal") {
-            return string.Empty;  // ignore this filter
-         }
 
          builder.Append(ResolveSide(filter, "left", factory));
          builder.Append(" ");

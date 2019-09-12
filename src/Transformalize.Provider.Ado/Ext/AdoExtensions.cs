@@ -98,14 +98,17 @@ namespace Transformalize.Providers.Ado.Ext {
       }
 
       public static string SqlSelectFacetFromInput(this InputContext c, Filter f, IConnectionFactory cf) {
-         var filter = c.Entity.Filter.Any() ? "WHERE " + c.ResolveFilter(cf) + " " : string.Empty;
-         return $"SELECT {cf.Enclose(f.LeftField.Name)} + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {c.Entity.Name}{(c.Entity.NoLock ? " WITH (NOLOCK) " : string.Empty)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
+         var resolved = c.ResolveFilter(cf);
+         var filter = resolved == string.Empty ? string.Empty : $"WHERE {resolved} ";
+         var left = f.LeftField.Type != "string" ? $"CAST({cf.Enclose(f.LeftField.Name)} AS NVARCHAR(128))" : cf.Enclose(f.LeftField.Name);
+         return $"SELECT {left} + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {c.Entity.Name}{(c.Entity.NoLock ? " WITH (NOLOCK) " : string.Empty)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
       }
 
       public static string SqlSelectInput(this InputContext c, Field[] fields, IConnectionFactory cf) {
          var fieldList = string.Join(",", fields.Select(f => cf.Enclose(f.Name)));
          var table = SqlInputName(c, cf);
-         var filter = c.Entity.Filter.Any() ? "WHERE " + c.ResolveFilter(cf) : string.Empty;
+         var resolved = c.ResolveFilter(cf);
+         var filter = resolved == string.Empty ? string.Empty : $"WHERE {resolved} ";
          var orderBy = c.ResolveOrder(cf);
 
          if (!c.Entity.IsPageRequest())
@@ -164,7 +167,8 @@ FROM (
          var versionFilter = $"{cf.Enclose(c.Entity.GetVersionField().Name)} {(c.Entity.Overlap ? ">=" : ">")} @MinVersion";
          var fieldList = string.Join(",", fields.Select(f => cf.Enclose(f.Name)));
          var table = SqlInputName(c, cf);
-         var filter = c.Entity.Filter.Any() ? $" WHERE {c.ResolveFilter(cf)} AND {versionFilter}" : $" WHERE {versionFilter}";
+         var resolved = c.ResolveFilter(cf);
+         var filter = resolved == string.Empty ? $" WHERE {versionFilter}" : $" WHERE {resolved} AND {versionFilter}";
          return $"SELECT {(c.Entity.Distinct ? "DISTINCT " : string.Empty)} {fieldList} FROM {table} {filter} {c.ResolveOrder(cf)}";
       }
 
@@ -469,11 +473,11 @@ FROM (
 
          foreach (var entity in c.Process.GetStarFields()) {
 
-            foreach (var field in entity.Where(f=>f.System)) {
+            foreach (var field in entity.Where(f => f.System)) {
                definitions.Add(cf.Enclose(field.Alias) + " " + cf.SqlDataType(field) + " NOT NULL");
             }
 
-            foreach (var field in entity.Where(f=>!f.System).OrderBy(f=>f.Alias)) {
+            foreach (var field in entity.Where(f => !f.System).OrderBy(f => f.Alias)) {
                definitions.Add(cf.Enclose(field.Alias) + " " + cf.SqlDataType(field) + " NOT NULL");
             }
          }
