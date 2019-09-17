@@ -17,6 +17,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,7 @@ namespace Transformalize.Providers.Ado.Ext {
    public static class SqlFilterExtensions {
 
       public static char TextQualifier = '\'';
+      public static HashSet<string> ListOperators = new HashSet<string>() { "in", "notin" };
 
       public static string ResolveFilter(this IContext c, IConnectionFactory factory) {
 
@@ -38,7 +40,7 @@ namespace Transformalize.Providers.Ado.Ext {
          for (var i = 0; i < c.Entity.Filter.Count; i++) {
             var filter = c.Entity.Filter[i];
 
-            if (filter.Operator == "equal" && filter.Value == filter.IgnoreValue || filter.Value == $"{TextQualifier}{filter.IgnoreValue}{TextQualifier}") {
+            if (filter.Value == filter.IgnoreValue || filter.Value == $"{TextQualifier}{filter.IgnoreValue}{TextQualifier}") {
                continue;  // ignore this filter
             }
 
@@ -62,16 +64,18 @@ namespace Transformalize.Providers.Ado.Ext {
       }
 
       private static string ResolveExpression(this IContext c, Filter filter, IConnectionFactory factory) {
+
          if (!string.IsNullOrEmpty(filter.Expression))
             return filter.Expression;
 
          var builder = new StringBuilder();
+         var leftSide = ResolveSide(filter, "left", factory);
+         var op = ResolveOperator(filter.Operator);
          var rightSide = ResolveSide(filter, "right", factory);
-         var resolvedOperator = ResolveOperator(filter.Operator);
 
-         builder.Append(ResolveSide(filter, "left", factory));
+         builder.Append(leftSide);
          builder.Append(" ");
-         builder.Append(resolvedOperator);
+         builder.Append(op);
          builder.Append(" ");
          builder.Append(rightSide);
 
@@ -104,33 +108,56 @@ namespace Transformalize.Providers.Ado.Ext {
             return "NULL";
 
          if (!otherIsField) {
-            double number;
-            if (double.TryParse(value, out number)) {
+            if (double.TryParse(value, out double number)) {
                return number.ToString(CultureInfo.InvariantCulture);
             }
             return TextQualifier + value + TextQualifier;
          }
 
-         if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
-            return TextQualifier + value + TextQualifier;
+         if (ListOperators.Contains(filter.Operator)) {
+            var items = new List<string>();
+            foreach(var item in value.Split(filter.Delimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)) {
+               if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
+                  items.Add(TextQualifier + item + TextQualifier);
+               } else {
+                  items.Add(item);
+               }
+            }
+            return "(" + string.Join(",", items) + ")";
+         } else {
+            if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
+               return TextQualifier + value + TextQualifier;
+            } else {
+               return value;
+            }
          }
-         return value;
       }
 
       private static string ResolveOperator(string op) {
          switch (op) {
+            case "==":
             case "equal":
+            case "equals":
                return "=";
+            case "gt":
             case "greaterthan":
                return ">";
+            case "gte":
             case "greaterthanequal":
                return ">=";
+            case "lt":
             case "lessthan":
                return "<";
+            case "lte":
             case "lessthanequal":
                return "<=";
             case "notequal":
+            case "notequals":
                return "!=";
+            case "in":
+               return "IN";
+            case "notin":
+               return "NOT IN";
             default:
                return "=";
          }
