@@ -62,6 +62,52 @@ namespace Test.Unit {
       }
 
       [TestMethod]
+      public void IgnoreAsterisk2() {
+         const string xml = @"<cfg name='name' mode='report'>
+  <parameters>
+    <add name='Stars' value='2' prompt='true' />
+    <add name='FirstName' value='*' prompt='true' multiple='true' />
+  </parameters>
+  <connections>
+    <add name='input' provider='sqlserver' server='localhost' database='Junk' />
+  </connections>
+  <entities>
+    <add name='BogusStar'>
+      <filter>
+          <add field='Stars' value='@[Stars]' type='facet' />
+          <add field='FirstName' operator='in' value='@[FirstName]' type='facet' />
+      </filter>
+      <fields>
+        <add name='Identity' primary-key='true' type='int' />
+        <add name='FirstName' alias='FirstName' label='FirstName' sortfield='FirstName' sortable='true' />
+        <add name='LastName' alias='LastName' label='LastName' sortfield='LastName' sortable='true' />
+        <add name='Stars' type='byte' alias='Stars' label='Stars' sortfield='Stars' sortable='true' />
+        <add name='Reviewers' type='int' alias='Reviewers' label='Reviewers' sortfield='Reviewers' sortable='true'/>
+      </fields>
+    </add>
+  </entities>
+</cfg>";
+         var logger = new ConsoleLogger();
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
+
+            // get and test process
+            var process = outer.Resolve<Process>();
+            foreach (var error in process.Errors()) {
+               Console.WriteLine(error);
+            }
+            Assert.AreEqual(0, process.Errors().Length);
+
+            using (var inner = new Container(new AdoProviderModule()).CreateScope(process, logger)) {
+               var context = inner.ResolveNamed<InputContext>("nameBogusStar");
+               var actual = context.SqlSelectInput(context.Entity.GetAllFields().Where(f => f.Input).ToArray(), new NullConnectionFactory());
+               Assert.AreEqual("SELECT Identity,FirstName,LastName,Stars,Reviewers FROM BogusStar WHERE (Stars = 2)", actual);
+            }
+
+         }
+
+      }
+
+      [TestMethod]
       public void NoFilters() {
          const string xml = @"
    <cfg name='Test'>

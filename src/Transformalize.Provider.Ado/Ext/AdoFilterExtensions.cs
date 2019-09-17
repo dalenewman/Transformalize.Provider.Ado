@@ -27,6 +27,10 @@ using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Ado.Ext {
 
+   class ExpressionContinuation {
+      public string Expression { get; set; }
+      public string Continuation { get; set; }
+   }
    public static class SqlFilterExtensions {
 
       public static char TextQualifier = '\'';
@@ -35,31 +39,37 @@ namespace Transformalize.Providers.Ado.Ext {
       public static string ResolveFilter(this IContext c, IConnectionFactory factory) {
 
          var builder = new StringBuilder();
-         var last = c.Entity.Filter.Count - 1;
+         var filtered = new List<ExpressionContinuation>();
 
-         for (var i = 0; i < c.Entity.Filter.Count; i++) {
-            var filter = c.Entity.Filter[i];
-
+         foreach (var filter in c.Entity.Filter) {
             if (filter.Value == filter.IgnoreValue || filter.Value == $"{TextQualifier}{filter.IgnoreValue}{TextQualifier}") {
                continue;  // ignore this filter
-            }
-
-            var expression = ResolveExpression(c, filter, factory);
-            if (expression != string.Empty) {
-               builder.Append(expression);
-
-               if (i >= last) {
-                  continue;
+            } else {
+               var tried = new ExpressionContinuation { Expression = ResolveExpression(c, filter, factory) };
+               if (tried.Expression != string.Empty) {
+                  filtered.Add(tried);
                }
-                  
-               builder.Append(" ");
-               builder.Append(filter.Continuation);
-               builder.Append(" ");
             }
          }
 
+         var last = filtered.Count - 1;
+
+         for (var i = 0; i < filtered.Count; i++) {
+            var filter = filtered[i];
+
+            builder.Append(filter.Expression);
+
+            if (i >= last) {
+               continue;
+            }
+
+            builder.Append(" ");
+            builder.Append(filter.Continuation);
+            builder.Append(" ");
+         }
+
          var result = builder.ToString().Trim(' ');
-         
+
          return result == string.Empty ? string.Empty : $"({builder})";
       }
 
@@ -116,7 +126,7 @@ namespace Transformalize.Providers.Ado.Ext {
 
          if (ListOperators.Contains(filter.Operator)) {
             var items = new List<string>();
-            foreach(var item in value.Split(filter.Delimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)) {
+            foreach (var item in value.Split(filter.Delimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)) {
                if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
                   items.Add(TextQualifier + item + TextQualifier);
                } else {
