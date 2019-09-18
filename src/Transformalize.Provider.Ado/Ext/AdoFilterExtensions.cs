@@ -34,28 +34,28 @@ namespace Transformalize.Providers.Ado.Ext {
    public static class SqlFilterExtensions {
 
       public static char TextQualifier = '\'';
-      public static HashSet<string> ListOperators = new HashSet<string>() { "in", "notin" };
+      public static HashSet<string> ListOperators = new HashSet<string>() { "IN", "NOT IN" };
 
       public static string ResolveFilter(this IContext c, IConnectionFactory factory) {
 
          var builder = new StringBuilder();
-         var filtered = new List<ExpressionContinuation>();
+         var filters = new List<ExpressionContinuation>();
 
          foreach (var filter in c.Entity.Filter) {
-            if (filter.Value == filter.IgnoreValue || filter.Value == $"{TextQualifier}{filter.IgnoreValue}{TextQualifier}") {
+            if (filter.Value == filter.WildCard) {
                continue;  // ignore this filter
             } else {
-               var tried = new ExpressionContinuation { Expression = ResolveExpression(c, filter, factory) };
+               var tried = new ExpressionContinuation { Expression = ResolveExpression(c, filter, factory), Continuation = filter.Continuation };
                if (tried.Expression != string.Empty) {
-                  filtered.Add(tried);
+                  filters.Add(tried);
                }
             }
          }
 
-         var last = filtered.Count - 1;
+         var last = filters.Count - 1;
 
-         for (var i = 0; i < filtered.Count; i++) {
-            var filter = filtered[i];
+         for (var i = 0; i < filters.Count; i++) {
+            var filter = filters[i];
 
             builder.Append(filter.Expression);
 
@@ -73,26 +73,14 @@ namespace Transformalize.Providers.Ado.Ext {
          return result == string.Empty ? string.Empty : $"({builder})";
       }
 
-      private static string ResolveExpression(this IContext c, Filter filter, IConnectionFactory factory) {
-
+      private static string ResolveExpression(IContext c, Filter filter, IConnectionFactory factory) {
          if (!string.IsNullOrEmpty(filter.Expression))
             return filter.Expression;
-
-         var builder = new StringBuilder();
-         var leftSide = ResolveSide(filter, "left", factory);
-         var op = ResolveOperator(filter.Operator);
-         var rightSide = ResolveSide(filter, "right", factory);
-
-         builder.Append(leftSide);
-         builder.Append(" ");
-         builder.Append(op);
-         builder.Append(" ");
-         builder.Append(rightSide);
-
-         return builder.ToString();
+         var resolvedOperator = ResolveOperator(c, filter);
+         return $"{ResolveSide(filter, "left", resolvedOperator, factory)} {resolvedOperator} {ResolveSide(filter, "right", resolvedOperator, factory)}";
       }
 
-      private static string ResolveSide(Filter filter, string side, IConnectionFactory factory) {
+      private static string ResolveSide(Filter filter, string side, string resolvedOperator, IConnectionFactory factory) {
 
          bool isField;
          string value;
@@ -124,7 +112,7 @@ namespace Transformalize.Providers.Ado.Ext {
             return TextQualifier + value + TextQualifier;
          }
 
-         if (ListOperators.Contains(filter.Operator)) {
+         if (ListOperators.Contains(resolvedOperator)) {
             var items = new List<string>();
             foreach (var item in value.Split(filter.Delimiter.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)) {
                if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
@@ -135,20 +123,56 @@ namespace Transformalize.Providers.Ado.Ext {
             }
             return "(" + string.Join(",", items) + ")";
          } else {
+            if(filter.Type == "search" && filter.WildCard != "%") {
+               if (value.Contains(filter.WildCard)) {
+                  value = value.Replace(filter.WildCard, "%");
+               } else {
+                  value = $"%{value}%";
+               }
+            }
+
             if (AdoConstants.StringTypes.Any(st => st == otherField.Type)) {
                return TextQualifier + value + TextQualifier;
             } else {
-               return value;
+               if (otherField.Type.StartsWith("bool")) {
+                  var v = value.ToLower();
+                  return v == "true" || v == "yes" ? "1" : "0";
+               } else {
+                  return value;
+               }
             }
          }
       }
 
-      private static string ResolveOperator(string op) {
+      private static string ResolveOperator(IContext context, Filter filter) {
+         var converted = ConvertOperator(filter.Operator);
+         switch (filter.Type) {
+            case "search":
+               if (converted == "=") {
+                  return "LIKE";
+               }
+               if (converted == "!=") {
+                  return "NOT LIKE";
+               }
+               return converted;
+            case "facet":
+               var parameter = context.Process.Parameters.FirstOrDefault(p => p.Map == filter.Map);
+               if(parameter != null && parameter.Multiple) {
+                  if(converted == "=") {
+                     return "IN";
+                  }
+                  if(converted == "!=") {
+                     return "NOT IN";
+                  }
+               }
+               return converted;
+            default:
+               return converted;
+         }
+      }
+
+      private static string ConvertOperator(string op) {
          switch (op) {
-            case "==":
-            case "equal":
-            case "equals":
-               return "=";
             case "gt":
             case "greaterthan":
                return ">";
@@ -161,6 +185,8 @@ namespace Transformalize.Providers.Ado.Ext {
             case "lte":
             case "lessthanequal":
                return "<=";
+            case "!=":
+            case "!==":
             case "notequal":
             case "notequals":
                return "!=";
@@ -168,6 +194,10 @@ namespace Transformalize.Providers.Ado.Ext {
                return "IN";
             case "notin":
                return "NOT IN";
+            case "like":
+               return "LIKE";
+            case "notlike":
+               return "NOT LIKE";
             default:
                return "=";
          }

@@ -108,6 +108,140 @@ namespace Test.Unit {
       }
 
       [TestMethod]
+      public void IgnoreSearchAsterisk() {
+         const string xml = @"<cfg name='name'>
+  <parameters>
+    <add name='FirstName' value='*' prompt='true' />
+  </parameters>
+  <connections>
+    <add name='input' provider='sqlserver' server='localhost' database='Junk' />
+  </connections>
+  <entities>
+    <add name='BogusStar'>
+      <filter>
+          <add field='FirstName' value='@[FirstName]' type='search' />
+      </filter>
+      <fields>
+        <add name='Identity' primary-key='true' type='int' />
+        <add name='FirstName' alias='FirstName' label='FirstName' sortfield='FirstName' sortable='true' />
+        <add name='LastName' alias='LastName' label='LastName' sortfield='LastName' sortable='true' />
+        <add name='Stars' type='byte' alias='Stars' label='Stars' sortfield='Stars' sortable='true' />
+        <add name='Reviewers' type='int' alias='Reviewers' label='Reviewers' sortfield='Reviewers' sortable='true'/>
+      </fields>
+    </add>
+  </entities>
+</cfg>";
+         var logger = new ConsoleLogger();
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
+
+            // get and test process
+            var process = outer.Resolve<Process>();
+            foreach (var error in process.Errors()) {
+               Console.WriteLine(error);
+            }
+            Assert.AreEqual(0, process.Errors().Length);
+
+            using (var inner = new Container(new AdoProviderModule()).CreateScope(process, logger)) {
+               var context = inner.ResolveNamed<InputContext>("nameBogusStar");
+               var actual = context.SqlSelectInput(context.Entity.GetAllFields().Where(f => f.Input).ToArray(), new NullConnectionFactory());
+               Assert.AreEqual("SELECT Identity,FirstName,LastName,Stars,Reviewers FROM BogusStar", actual);
+            }
+
+         }
+
+      }
+
+      [TestMethod]
+      public void HandleSearchWithoutAsterisk() {
+         const string xml = @"<cfg name='name'>
+  <parameters>
+    <add name='FirstName' value='Dale' prompt='true' />
+  </parameters>
+  <connections>
+    <add name='input' provider='sqlserver' server='localhost' database='Junk' />
+  </connections>
+  <entities>
+    <add name='BogusStar'>
+      <filter>
+          <add field='FirstName' value='@[FirstName]' type='search' />
+      </filter>
+      <fields>
+        <add name='Identity' primary-key='true' type='int' />
+        <add name='FirstName' alias='FirstName' label='FirstName' sortfield='FirstName' sortable='true' />
+        <add name='LastName' alias='LastName' label='LastName' sortfield='LastName' sortable='true' />
+        <add name='Stars' type='byte' alias='Stars' label='Stars' sortfield='Stars' sortable='true' />
+        <add name='Reviewers' type='int' alias='Reviewers' label='Reviewers' sortfield='Reviewers' sortable='true'/>
+      </fields>
+    </add>
+  </entities>
+</cfg>";
+         var logger = new ConsoleLogger();
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
+
+            // get and test process
+            var process = outer.Resolve<Process>();
+            foreach (var error in process.Errors()) {
+               Console.WriteLine(error);
+            }
+            Assert.AreEqual(0, process.Errors().Length);
+
+            using (var inner = new Container(new AdoProviderModule()).CreateScope(process, logger)) {
+               var context = inner.ResolveNamed<InputContext>("nameBogusStar");
+               var actual = context.SqlSelectInput(context.Entity.GetAllFields().Where(f => f.Input).ToArray(), new NullConnectionFactory());
+               Assert.AreEqual("SELECT Identity,FirstName,LastName,Stars,Reviewers FROM BogusStar WHERE (FirstName LIKE '%Dale%')", actual);
+            }
+
+         }
+
+      }
+
+      [TestMethod]
+      public void HandleSearchWithoutTrailingAsterisk() {
+         const string xml = @"<cfg name='name'>
+  <parameters>
+    <add name='FirstName' value='Dale*' prompt='true' />
+  </parameters>
+  <connections>
+    <add name='input' provider='sqlserver' server='localhost' database='Junk' />
+  </connections>
+  <entities>
+    <add name='BogusStar'>
+      <filter>
+          <add field='FirstName' value='@[FirstName]' type='search' />
+          <add expression='1=1' />
+      </filter>
+      <fields>
+        <add name='Identity' primary-key='true' type='int' />
+        <add name='FirstName' alias='FirstName' label='FirstName' sortfield='FirstName' sortable='true' />
+        <add name='LastName' alias='LastName' label='LastName' sortfield='LastName' sortable='true' />
+        <add name='Stars' type='byte' alias='Stars' label='Stars' sortfield='Stars' sortable='true' />
+        <add name='Reviewers' type='int' alias='Reviewers' label='Reviewers' sortfield='Reviewers' sortable='true'/>
+      </fields>
+    </add>
+  </entities>
+</cfg>";
+         var logger = new ConsoleLogger();
+         using (var outer = new ConfigurationContainer().CreateScope(xml, logger)) {
+
+            // get and test process
+            var process = outer.Resolve<Process>();
+            foreach (var error in process.Errors()) {
+               Console.WriteLine(error);
+            }
+            Assert.AreEqual(0, process.Errors().Length);
+
+            using (var inner = new Container(new AdoProviderModule()).CreateScope(process, logger)) {
+               var context = inner.ResolveNamed<InputContext>("nameBogusStar");
+               var actual = context.SqlSelectInput(context.Entity.GetAllFields().Where(f => f.Input).ToArray(), new NullConnectionFactory());
+               Assert.AreEqual("SELECT Identity,FirstName,LastName,Stars,Reviewers FROM BogusStar WHERE (FirstName LIKE 'Dale%' AND 1=1)", actual);
+            }
+
+         }
+
+      }
+
+
+      [TestMethod]
       public void NoFilters() {
          const string xml = @"
    <cfg name='Test'>

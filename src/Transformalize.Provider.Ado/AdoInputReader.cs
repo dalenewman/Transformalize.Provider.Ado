@@ -83,7 +83,7 @@ namespace Transformalize.Providers.Ado {
                   _input.Debug(() => countCmd.CommandText);
                   AddAdoParameters(countCmd);
                   try {
-                     _input.Entity.Hits = (int) countCmd.ExecuteScalar();
+                     _input.Entity.Hits = (int)countCmd.ExecuteScalar();
                   } catch (DbException ex) {
                      _input.Error($"Error counting {_input.Entity.Name} records.");
                      _input.Error(ex.Message);
@@ -101,16 +101,14 @@ namespace Transformalize.Providers.Ado {
                cmd.CommandText = _input.Entity.Query;
             }
 
-            if(_input.Process.Mode == "report") {
-               // automatic facet filter maps need connections and queries and map readers
-               foreach(var filter in _input.Entity.Filter.Where(f=>f.Type == "facet" && f.Map != string.Empty)) {
-                  var map = _input.Process.Maps.First(m => m.Name == filter.Map);
-                  if (!map.Items.Any() && map.Query == string.Empty) {
-                     map.Connection = _input.Connection.Name;
-                     map.Query = _input.SqlSelectFacetFromInput(filter, _factory);
-                     foreach(var mapItem in new AdoMapReader(_input, cn, map.Name).Read(_input)) {
-                        map.Items.Add(mapItem);
-                     }
+            // automatic facet filter maps need connections and queries and map readers
+            foreach (var filter in _input.Entity.Filter.Where(f => f.Type == "facet" && f.Map != string.Empty)) {
+               var map = _input.Process.Maps.First(m => m.Name == filter.Map);
+               if (!map.Items.Any() && map.Query == string.Empty) {
+                  map.Connection = _input.Connection.Name;
+                  map.Query = _input.SqlSelectFacetFromInput(filter, _factory);
+                  foreach (var mapItem in new AdoMapReader(_input, cn, map.Name).Read(_input)) {
+                     map.Items.Add(mapItem);
                   }
                }
             }
@@ -141,7 +139,7 @@ namespace Transformalize.Providers.Ado {
                      _rowCount++;
                      buffer.Add(_rowCreator.Create(reader, _fields));
                   }
-                  foreach(var row in buffer) {
+                  foreach (var row in buffer) {
                      yield return row;
                   }
                } else {
