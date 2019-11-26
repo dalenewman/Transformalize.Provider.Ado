@@ -108,6 +108,12 @@ namespace Transformalize.Providers.Ado {
                   map.Connection = _input.Connection.Name;
                   map.Query = _input.SqlSelectFacetFromInput(filter, _factory);
                   foreach (var mapItem in new AdoMapReader(_input, cn, map.Name).Read(_input)) {
+                     if (mapItem.To != null) {
+                        var value = mapItem.To.ToString();
+                        if (value.Contains("'")) {
+                           mapItem.To = value.Replace("'", "''");
+                        }
+                     }
                      map.Items.Add(mapItem);
                   }
                }
