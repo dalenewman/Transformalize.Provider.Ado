@@ -42,8 +42,11 @@
     <Reference Include="BenchmarkDotNet, Version=0.11.4.0, Culture=neutral, PublicKeyToken=aa0ca2f9092cefc4, processorArchitecture=MSIL">
       <HintPath>..\..\packages\BenchmarkDotNet.0.11.4\lib\netstandard2.0\BenchmarkDotNet.dll</HintPath>
     </Reference>
-    <Reference Include="Bogus, Version=26.0.1.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Bogus.26.0.1\lib\net40\Bogus.dll</HintPath>
+    <Reference Include="Bogus, Version=28.4.1.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Bogus.28.4.1\lib\net40\Bogus.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="Cfg.Net.Environment, Version=0.3.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Cfg-NET.Environment.0.3.5\lib\netstandard2.0\Cfg.Net.Environment.dll</HintPath>
@@ -66,8 +69,8 @@
     <Reference Include="DateMath, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\DateMath.1.0.0\lib\net45\DateMath.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
+    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=2.10.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.Common.2.10.0\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
@@ -81,14 +84,17 @@
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Win32.Registry.4.5.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=8.0.15.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MySql.Data.8.0.15\lib\net452\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MySql.Data.8.0.18\lib\net452\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NLog.4.6.0\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Npgsql, Version=4.0.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Npgsql.4.0.5\lib\net451\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -267,20 +273,20 @@
     <Reference Include="Transformalize.Logging.NLog, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.Logging.NLog.0.5.0-beta\lib\net462\Transformalize.Logging.NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.Ado, Version=0.6.23.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.Ado.0.6.23-beta\lib\net462\Transformalize.Provider.Ado.dll</HintPath>
+    <Reference Include="Transformalize.Provider.Ado, Version=0.6.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.Ado.0.6.24-beta\lib\net462\Transformalize.Provider.Ado.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.Bogus, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.Bogus.0.5.0-beta\lib\net462\Transformalize.Provider.Bogus.dll</HintPath>
+    <Reference Include="Transformalize.Provider.Bogus, Version=0.6.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.Bogus.0.6.21-beta\lib\net462\Transformalize.Provider.Bogus.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.Bogus.Autofac, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.Bogus.Autofac.0.5.0-beta\lib\net462\Transformalize.Provider.Bogus.Autofac.dll</HintPath>
+    <Reference Include="Transformalize.Provider.Bogus.Autofac, Version=0.6.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.Bogus.Autofac.0.6.21-beta\lib\net462\Transformalize.Provider.Bogus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.MySql, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.MySql.0.5.0-beta\lib\net462\Transformalize.Provider.MySql.dll</HintPath>
+    <Reference Include="Transformalize.Provider.MySql, Version=0.6.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.MySql.0.6.24-beta\lib\net462\Transformalize.Provider.MySql.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.MySql.Autofac, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.MySql.Autofac.0.5.0-beta\lib\net462\Transformalize.Provider.MySql.Autofac.dll</HintPath>
+    <Reference Include="Transformalize.Provider.MySql.Autofac, Version=0.6.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.MySql.Autofac.0.6.24-beta\lib\net462\Transformalize.Provider.MySql.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Transformalize.Provider.PostgreSql, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.Provider.PostgreSql.0.5.0-beta\lib\net462\Transformalize.Provider.PostgreSql.dll</HintPath>
@@ -300,11 +306,11 @@
     <Reference Include="Transformalize.Provider.Sqlite.Autofac, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.Provider.Sqlite.Autofac.0.4.0-beta\lib\net462\Transformalize.Provider.Sqlite.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.SqlServer, Version=0.6.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.SqlServer.0.6.17-beta\lib\net462\Transformalize.Provider.SqlServer.dll</HintPath>
+    <Reference Include="Transformalize.Provider.SqlServer, Version=0.6.23.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.SqlServer.0.6.23-beta\lib\net462\Transformalize.Provider.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.SqlServer.Autofac, Version=0.6.17.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.SqlServer.Autofac.0.6.17-beta\lib\net462\Transformalize.Provider.SqlServer.Autofac.dll</HintPath>
+    <Reference Include="Transformalize.Provider.SqlServer.Autofac, Version=0.6.23.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.SqlServer.Autofac.0.6.23-beta\lib\net462\Transformalize.Provider.SqlServer.Autofac.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

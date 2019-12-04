@@ -83,7 +83,7 @@ namespace Transformalize.Providers.Ado {
                   _input.Debug(() => countCmd.CommandText);
                   AddAdoParameters(countCmd);
                   try {
-                     _input.Entity.Hits = (int)countCmd.ExecuteScalar();
+                     _input.Entity.Hits = Convert.ToInt32(countCmd.ExecuteScalar());
                   } catch (DbException ex) {
                      _input.Error($"Error counting {_input.Entity.Name} records.");
                      _input.Error(ex.Message);
