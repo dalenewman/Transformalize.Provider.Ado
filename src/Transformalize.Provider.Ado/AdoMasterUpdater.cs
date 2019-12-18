@@ -37,10 +37,16 @@ namespace Transformalize.Providers.Ado {
          _output = output;
          _cf = cf;
          _queryWriter = queryWriter;
-         _master = _output.Process.Entities.First(e => e.IsMaster);
+         _master = _output.Process.Entities.FirstOrDefault(e => e.IsMaster);
       }
 
       public void Update() {
+
+         if (_master == null) {
+            _output.Error("The master isn't set, which indicates your arrangement has errors.");
+            return;
+         }
+
          var status = _output.GetEntityStatus();
          if (!status.NeedsUpdate())
             return;
