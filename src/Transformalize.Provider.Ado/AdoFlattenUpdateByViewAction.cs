@@ -20,13 +20,16 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using Dapper;
-using Transformalize.Actions;
 using Transformalize.Configuration;
 using Transformalize.Context;
 using Transformalize.Contracts;
 using Transformalize.Extensions;
 
 namespace Transformalize.Providers.Ado {
+
+   /// <summary>
+   /// todo: move the different query writing to each provider
+   /// </summary>
    public class AdoFlattenUpdateByViewAction : IAction {
 
       private readonly OutputContext _output;
@@ -43,15 +46,29 @@ namespace Transformalize.Providers.Ado {
 
       public ActionResponse Execute() {
 
-         var updates = string.Join(", ", _model.Aliases.Where(f => f != _model.EnclosedKeyLongName).Select(f => $"f.{f} = s.{f}"));
+         var prefix = _model.AdoProvider == AdoProvider.PostgreSql ? string.Empty : "f.";
+         var updates = string.Join(", ", _model.Aliases.Where(f => f != _model.EnclosedKeyLongName).Select(f => $"{prefix}{f} = s.{f}"));
+         string command;
 
-         var command = $@"
+         if(_model.AdoProvider == AdoProvider.PostgreSql) {
+            command = $@"
+UPDATE {_model.Flat} f
+SET {updates}
+FROM {_model.Master} m, {_model.Star} s
+WHERE m.{_model.EnclosedKeyShortName} = f.{_model.EnclosedKeyLongName}
+AND f.{_model.EnclosedKeyLongName} = s.{_model.EnclosedKeyLongName}
+AND m.{_model.Batch} > @Threshold;
+";
+         } else {
+            command = $@"
 UPDATE f
 SET {updates}
 FROM {_model.Flat} f
 INNER JOIN {_model.Master} m ON (m.{_model.EnclosedKeyShortName} = f.{_model.EnclosedKeyLongName})
 INNER JOIN {_model.Star} s ON (f.{_model.EnclosedKeyLongName} = s.{_model.EnclosedKeyLongName})
-WHERE m.{_model.Batch} > @Threshold;";
+WHERE m.{_model.Batch} > @Threshold;
+";
+         }
 
          if(_cn.State != ConnectionState.Open) {
             _cn.Open();

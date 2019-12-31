@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Transformalize.Configuration;

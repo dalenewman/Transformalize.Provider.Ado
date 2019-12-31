@@ -42,6 +42,11 @@ namespace Transformalize.Providers.Ado {
          }
 
          var model = new AdoSqlModel(_output, _cf);
+
+         if (_output.Process.Mode == "init") {
+            return new AdoFlattenFirstRunAction(_output, _cf, model).Execute();
+         }
+
          ActionResponse updateResponse = null;
          ActionResponse insertResponse = null;
 
@@ -53,10 +58,6 @@ namespace Transformalize.Providers.Ado {
                _output.Info("Begin Flat Insert/Update Transaction");
 
                if (model.MasterEntity.Inserts > 0) {
-
-                  if (_output.Process.Mode == "init") {
-                     return new AdoFlattenFirstRunAction(_output, _cf, model).Execute();
-                  }
 
                   if (_cf.AdoProvider == AdoProvider.SqlCe) {
                      insertResponse = new AdoFlattenInsertBySelectAction(_output, _cf, model, cn, trans).Execute();

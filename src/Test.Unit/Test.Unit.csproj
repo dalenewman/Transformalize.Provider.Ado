@@ -54,8 +54,8 @@
     <Reference Include="CfgNet, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Cfg-NET.0.11.0\lib\net462\CfgNet.dll</HintPath>
     </Reference>
-    <Reference Include="DateMath, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DateMath.1.0.0\lib\net45\DateMath.dll</HintPath>
+    <Reference Include="DateMath, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DateMath.1.1.0\lib\net462\DateMath.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -73,8 +73,8 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Transformalize, Version=0.6.20.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.6.20-beta\lib\net462\Transformalize.dll</HintPath>
+    <Reference Include="Transformalize, Version=0.6.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.0.6.21-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
     <Reference Include="Transformalize.Container.Autofac, Version=0.6.20.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.Container.Autofac.0.6.20-beta\lib\net462\Transformalize.Container.Autofac.dll</HintPath>

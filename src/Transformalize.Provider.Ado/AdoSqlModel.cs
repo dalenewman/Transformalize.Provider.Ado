@@ -16,43 +16,56 @@
 // limitations under the License.
 #endregion
 
+using System.Collections.Generic;
 using System.Linq;
 using Transformalize.Configuration;
 using Transformalize.Contracts;
 
 namespace Transformalize.Providers.Ado {
-    public class AdoSqlModel {
+   public class AdoSqlModel {
 
-        public Field[] Fields { get; }
-        public string[] Aliases { get; }
-        public string[] FieldNames { get; }
-        public string Flat { get; }
-        public string Star { get; }
-        public int Threshold { get; }
-        public string Batch { get; set; }
-        public string EnclosedKeyShortName { get; set; }
-        public string KeyShortName { get; set; }
-        public string KeyLongName { get; set; }
-        public string EnclosedKeyLongName { get; set; }
-        public string Master { get; set; }
-        public Entity MasterEntity { get; set; }
+      public Field[] Fields { get; }
+      public string[] Aliases { get; }
+      public string[] FieldNames { get; }
+      public string Flat { get; }
+      public string Star { get; }
+      public int Threshold { get; }
+      public string Batch { get; set; }
+      public string EnclosedKeyShortName { get; set; }
+      public string KeyShortName { get; set; }
+      public string KeyLongName { get; set; }
+      public string EnclosedKeyLongName { get; set; }
+      public string Master { get; set; }
+      public Entity MasterEntity { get; set; }
 
-        public AdoSqlModel(IContext output, IConnectionFactory cf) {
+      public AdoProvider AdoProvider { get; set; }
 
-            Fields = output.Process.GetStarFields().SelectMany(e => e).ToArray();
-            Aliases = Fields.Select(f => cf.Enclose(f.Alias)).ToArray();
-            FieldNames = Fields.Select(f => f.FieldName()).ToArray();
-            Flat = cf.Enclose(output.Process.Name + output.Process.FlatSuffix);
-            Star = cf.Enclose(output.Process.Name + output.Process.StarSuffix);
-            Threshold = output.Process.Entities.Select(e => e.BatchId).ToArray().Min() - 1;
-            MasterEntity = output.Process.Entities.First();
-            Master = cf.Enclose(MasterEntity.OutputTableName(output.Process.Name));
-            KeyLongName = Constants.TflKey;
-            KeyShortName = MasterEntity.Fields.First(f => f.Name == Constants.TflKey).FieldName();
-            EnclosedKeyShortName = cf.Enclose(KeyShortName);
-            EnclosedKeyLongName = cf.Enclose(Constants.TflKey);
-            Batch = cf.Enclose(MasterEntity.Fields.First(f => f.Name == Constants.TflBatchId).FieldName());
-        }
+      public AdoSqlModel(IContext output, IConnectionFactory cf) {
 
-    }
+         var starFields = output.Process.GetStarFields().ToArray();
+         var ordered = new List<Field>();
+         foreach (Field field in starFields[0].Where(f => f.System)) {
+            ordered.Add(field);
+         }
+         foreach (Field field in starFields[0].Where(f => !f.System).Union(starFields[1]).OrderBy(f => f.Alias)) {
+            ordered.Add(field);
+         }
+
+         Fields = ordered.ToArray();
+         Aliases = Fields.Select(f => cf.Enclose(f.Alias)).ToArray();
+         FieldNames = Fields.Select(f => f.FieldName()).ToArray();
+         Flat = cf.Enclose(output.Process.Name + output.Process.FlatSuffix);
+         Star = cf.Enclose(output.Process.Name + output.Process.StarSuffix);
+         Threshold = output.Process.Entities.Select(e => e.BatchId).ToArray().Min() - 1;
+         MasterEntity = output.Process.Entities.First();
+         Master = cf.Enclose(MasterEntity.OutputTableName(output.Process.Name));
+         KeyLongName = Constants.TflKey;
+         KeyShortName = MasterEntity.Fields.First(f => f.Name == Constants.TflKey).FieldName();
+         EnclosedKeyShortName = cf.Enclose(KeyShortName);
+         EnclosedKeyLongName = cf.Enclose(Constants.TflKey);
+         Batch = cf.Enclose(MasterEntity.Fields.First(f => f.Name == Constants.TflBatchId).FieldName());
+         AdoProvider = cf.AdoProvider;
+      }
+
+   }
 }
