@@ -2,19 +2,19 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado</id>
-    <version>0.6.25-beta</version>
+    <version>0.6.26-beta</version>
     <title>Transformalize Provider using ADO</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>common ado provider stuff module</description>
-    <releaseNotes>add ignore-value to filter (defaulted to *)</releaseNotes>
+    <releaseNotes>added cross database delete handler (only for sql server now)</releaseNotes>
     <copyright>Copyright 2013-2019</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="net462">
-        <dependency id="Transformalize" version="0.6.21-beta" />
+        <dependency id="Transformalize" version="0.6.24-beta" />
         <dependency id="Dapper" version="1.60.6" />
       </group>
     </dependencies>

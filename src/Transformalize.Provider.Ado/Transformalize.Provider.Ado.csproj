@@ -46,14 +46,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Transformalize, Version=0.6.21.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.6.21-beta\lib\net462\Transformalize.dll</HintPath>
+    <Reference Include="Transformalize, Version=0.6.24.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.0.6.24-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\AdoRunAction.cs" />
     <Compile Include="AdoCalculatedFieldUpdater.cs" />
     <Compile Include="AdoConstants.cs" />
+    <Compile Include="AdoCrossDatabaseEntityDeleteHandler.cs" />
     <Compile Include="AdoDeleter.cs" />
     <Compile Include="AdoEntityDepthChecker.cs" />
     <Compile Include="AdoEntityFormCommands.cs" />

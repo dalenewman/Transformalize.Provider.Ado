@@ -240,6 +240,29 @@ FROM (
          return sql;
       }
 
+      public static string SqlDeleteOutputCrossDatabase(this OutputContext c, IConnectionFactory cf, int batchId) {
+
+         var schema = c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema);
+         var inputDatabase = c.Process.Connections.First(cn => cn.Name == c.Entity.Connection).Database;
+         var inputName = cf.Enclose(inputDatabase) + "." + schema + "." + cf.Enclose(c.Entity.Name);
+         var outputName = cf.Enclose(c.Entity.OutputTableName(c.Process.Name));
+         var joins = string.Join(" AND ", c.Entity.GetPrimaryKey().Select(pk => "i." + cf.Enclose(pk.Name) + " = o." + pk.FieldName()));
+         var firstKey = cf.Enclose(c.Entity.GetPrimaryKey().First().Name);
+         var deletedField = c.Entity.Fields.First(f=>f.Name == c.Entity.TflDeleted().Name).FieldName();
+
+         // for now this will only work for sql server
+         var sql = $@"
+UPDATE o
+SET o.{deletedField} = 1
+FROM {outputName} o
+LEFT OUTER JOIN {inputName} i ON ({joins})
+WHERE o.{deletedField} != 1 
+AND i.{firstKey} IS NULL;";
+
+         c.Debug(() => sql);
+         return sql;
+      }
+
       public static string SqlDropOutput(this OutputContext c, IConnectionFactory cf) {
          var cascade = cf.AdoProvider == AdoProvider.PostgreSql ? " CASCADE" : string.Empty;
          var sql = $"DROP TABLE {cf.Enclose(c.Entity.OutputTableName(c.Process.Name))}{cascade}{cf.Terminator}";
