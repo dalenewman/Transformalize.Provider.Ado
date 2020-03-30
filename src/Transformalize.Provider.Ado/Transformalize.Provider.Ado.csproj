@@ -46,59 +46,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Transformalize, Version=0.6.24.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.6.24-beta\lib\net462\Transformalize.dll</HintPath>
+    <Reference Include="Transformalize, Version=0.6.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.0.6.28-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\AdoRunAction.cs" />
-    <Compile Include="AdoCalculatedFieldUpdater.cs" />
-    <Compile Include="AdoConstants.cs" />
-    <Compile Include="AdoCrossDatabaseEntityDeleteHandler.cs" />
-    <Compile Include="AdoDeleter.cs" />
-    <Compile Include="AdoEntityDepthChecker.cs" />
-    <Compile Include="AdoEntityFormCommands.cs" />
-    <Compile Include="AdoEntityInitializer.cs" />
-    <Compile Include="AdoEntityInserter.cs" />
-    <Compile Include="AdoEntityMatchingFieldsReader.cs" />
-    <Compile Include="AdoEntityMatchingKeysReader.cs" />
-    <Compile Include="AdoEntityUpdater.cs" />
-    <Compile Include="AdoEntityWriter.cs" />
-    <Compile Include="AdoFlatTableCreator.cs" />
-    <Compile Include="AdoFlattenAction.cs" />
-    <Compile Include="AdoFlattenFirstRunAction.cs" />
-    <Compile Include="AdoFlattenInsertBySelectAction.cs" />
-    <Compile Include="AdoFlattenInsertByViewAction.cs" />
-    <Compile Include="AdoFlattenTwoPartUpdateAction.cs" />
-    <Compile Include="AdoFlattenUpdateByViewAction.cs" />
-    <Compile Include="AdoInitializer.cs" />
-    <Compile Include="AdoInputBatchReader.cs" />
-    <Compile Include="AdoInputReader.cs" />
-    <Compile Include="AdoInputVersionDetector.cs" />
-    <Compile Include="AdoMapReader.cs" />
-    <Compile Include="AdoMasterUpdater.cs" />
-    <Compile Include="AdoOutputController.cs" />
-    <Compile Include="AdoOutputProvider.cs" />
-    <Compile Include="AdoParameterFinder.cs" />
-    <Compile Include="AdoProvider.cs" />
-    <Compile Include="AdoReader.cs" />
-    <Compile Include="AdoRowCreator.cs" />
-    <Compile Include="AdoSchemaReader.cs" />
-    <Compile Include="AdoSqlModel.cs" />
-    <Compile Include="AdoStarController.cs" />
-    <Compile Include="AdoStarParametersReader.cs" />
-    <Compile Include="AdoStarViewCreator.cs" />
-    <Compile Include="AdoTwoPartMasterUpdater.cs" />
-    <Compile Include="AdoUpdateMasterKeysQueryWriter.cs" />
-    <Compile Include="ConnectionStringParser.cs" />
-    <Compile Include="Ext\AdoExtensions.cs" />
-    <Compile Include="Ext\AdoFilterExtensions.cs" />
-    <Compile Include="IConnectionFactory.cs" />
-    <Compile Include="NullConnectionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="..\Transformalize.Provider.Ado.Shared\Transformalize.Provider.Ado.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

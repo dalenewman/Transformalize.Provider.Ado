@@ -1,25 +1,31 @@
 <?xml version="1.0"?>
 <package>
-  <metadata>
-    <id>Transformalize.Transform.Ado</id>
-    <version>0.6.26-beta</version>
-    <title>Transformalize Transform using ADO</title>
-    <authors>Dale Newman</authors>
-    <owners>Dale Newman</owners>
-    <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Transformalize Transform using ADO</description>
-    <releaseNotes>keep in sync with provider version</releaseNotes>
-    <copyright>Copyright 2013-2019</copyright>
-    <tags>etl</tags>
-    <dependencies>
-      <group targetFramework="net462">
-        <dependency id="Transformalize" version="0.6.24-beta" />
-        <dependency id="Dapper" version="1.60.6" />
-      </group>
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="..\src\Transformalize.Transform.Ado\bin\Release\Transformalize.Transform.Ado.dll" target="lib\net462\Transformalize.Transform.Ado.dll" />
-  </files>
+   <metadata>
+      <id>Transformalize.Transform.Ado</id>
+      <version>0.6.28-beta</version>
+      <title>Transformalize Transform using ADO</title>
+      <authors>Dale Newman</authors>
+      <owners>Dale Newman</owners>
+      <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
+      <requireLicenseAcceptance>false</requireLicenseAcceptance>
+      <description>Transformalize Transform using ADO</description>
+      <releaseNotes>added .net standard 2.0 target</releaseNotes>
+      <copyright>Copyright 2013-2020</copyright>
+      <tags>etl</tags>
+      <dependencies>
+         <group targetFramework="net462">
+            <dependency id="Transformalize" version="0.6.28-beta" />
+            <dependency id="Dapper" version="1.60.6" />
+         </group>
+         <group targetFramework="netstandard2.0">
+            <dependency id="Transformalize" version="0.6.28-beta" />
+            <dependency id="Dapper" version="1.60.6" />
+         </group>
+      </dependencies>
+   </metadata>
+   <files>
+      <file src="..\src\Transformalize.Transform.Ado\bin\Release\Transformalize.Transform.Ado.dll" target="lib\net462\Transformalize.Transform.Ado.dll" />
+      <file src="..\src\Transformalize.Transform.Ado.Standard.20\bin\Release\netstandard2.0\Transformalize.Transform.Ado.deps.json" target="lib\netstandard2.0\Transformalize.Transform.Ado.deps.json" />
+      <file src="..\src\Transformalize.Transform.Ado.Standard.20\bin\Release\netstandard2.0\Transformalize.Transform.Ado.dll" target="lib\netstandard2.0\Transformalize.Transform.Ado.dll" />
+   </files>
 </package>

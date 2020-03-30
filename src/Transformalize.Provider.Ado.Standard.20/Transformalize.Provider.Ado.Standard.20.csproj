@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Transformalize.Provider.Ado</RootNamespace>
+    <AssemblyName>Transformalize.Provider.Ado</AssemblyName>
+    <Version>0.6.28</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.60.6" />
+    <PackageReference Include="Transformalize" Version="0.6.28-beta" />
+  </ItemGroup>
+
+  <Import Project="..\Transformalize.Provider.Ado.Shared\Transformalize.Provider.Ado.Shared.projitems" Label="Shared" />
+
+</Project>

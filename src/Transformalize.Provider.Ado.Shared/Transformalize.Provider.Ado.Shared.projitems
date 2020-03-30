@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>ecec4fde-b5dd-46d2-8c96-3faf91fc3577</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Transformalize.Provider.Ado.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Actions\AdoRunAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoCalculatedFieldUpdater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoCrossDatabaseEntityDeleteHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoDeleter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityDepthChecker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityFormCommands.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityInserter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityMatchingFieldsReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityMatchingKeysReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityUpdater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoEntityWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoFlatTableCreator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoFlattenAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoFlattenFirstRunAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoFlattenInsertBySelectAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoFlattenInsertByViewAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoFlattenTwoPartUpdateAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoFlattenUpdateByViewAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoInputBatchReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoInputReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoInputVersionDetector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoMapReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoMasterUpdater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoOutputController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoOutputProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoParameterFinder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoRowCreator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoSchemaReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoSqlModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoStarController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoStarParametersReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoStarViewCreator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoTwoPartMasterUpdater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AdoUpdateMasterKeysQueryWriter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ConnectionStringParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ext\AdoExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Ext\AdoFilterExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IConnectionFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NullConnectionFactory.cs" />
+  </ItemGroup>
+</Project>
