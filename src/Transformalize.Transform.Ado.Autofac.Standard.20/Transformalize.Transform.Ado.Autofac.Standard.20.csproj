@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Transformalize.Transform.Ado.Autofac</RootNamespace>
+    <RootNamespace>Transformalize.Transforms.Ado.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Transform.Ado.Autofac</AssemblyName>
-    <Version>0.6.28</Version>
+    <Version>0.6.29</Version>
   </PropertyGroup>
 
   <Import Project="..\Transformalize.Transform.Ado.Autofac.Shared\Transformalize.Transform.Ado.Autofac.Shared.projitems" Label="Shared" />

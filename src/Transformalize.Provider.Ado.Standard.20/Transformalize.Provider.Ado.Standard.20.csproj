@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Transformalize.Provider.Ado</RootNamespace>
+    <RootNamespace>Transformalize.Providers.Ado</RootNamespace>
     <AssemblyName>Transformalize.Provider.Ado</AssemblyName>
-    <Version>0.6.28</Version>
+    <Version>0.6.29</Version>
   </PropertyGroup>
 
   <ItemGroup>
