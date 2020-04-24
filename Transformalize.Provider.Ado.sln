@@ -24,6 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmark", "src\Benchmark\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FFDA8880-D76E-4B3F-9BF4-A1998E6BD95B}"
 	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -31,11 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Unit", "src\Test.Unit\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Ado.Shared", "src\Transformalize.Provider.Ado.Shared\Transformalize.Provider.Ado.Shared.shproj", "{ECEC4FDE-B5DD-46D2-8C96-3FAF91FC3577}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Ado.Standard.20", "src\Transformalize.Provider.Ado.Standard.20\Transformalize.Provider.Ado.Standard.20.csproj", "{0DA64FE3-99E0-4965-82D6-46A6A890C38E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Ado.Standard.20", "src\Transformalize.Provider.Ado.Standard.20\Transformalize.Provider.Ado.Standard.20.csproj", "{0DA64FE3-99E0-4965-82D6-46A6A890C38E}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Provider.Ado.Autofac.Shared", "src\Transformalize.Provider.Ado.Autofac.Shared\Transformalize.Provider.Ado.Autofac.Shared.shproj", "{B9B56D2F-B9A1-437A-AFA1-63B6856E1EC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Provider.Ado.Autofac.Standard.20", "src\Transformalize.Provider.Ado.Autofac.Standard.20\Transformalize.Provider.Ado.Autofac.Standard.20.csproj", "{91F1BC15-3451-459F-AE05-E5AB66365359}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Provider.Ado.Autofac.Standard.20", "src\Transformalize.Provider.Ado.Autofac.Standard.20\Transformalize.Provider.Ado.Autofac.Standard.20.csproj", "{91F1BC15-3451-459F-AE05-E5AB66365359}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Provider", "Provider", "{B7847FC6-5692-4A0A-8606-795B19079E5B}"
 EndProject
@@ -43,7 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Provider.Autofac", "Provide
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Transform.Ado.Shared", "src\Transformalize.Transform.Ado.Shared\Transformalize.Transform.Ado.Shared.shproj", "{CA7DE5C1-08E5-487C-BE10-D0854396DA89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Transform.Ado.Standard.20", "src\Transformalize.Transform.Ado.Standard.20\Transformalize.Transform.Ado.Standard.20.csproj", "{D6D4CDEB-AEEB-44F5-AC1A-BC50488E9818}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Transform.Ado.Standard.20", "src\Transformalize.Transform.Ado.Standard.20\Transformalize.Transform.Ado.Standard.20.csproj", "{D6D4CDEB-AEEB-44F5-AC1A-BC50488E9818}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transform", "Transform", "{861C8F0E-8EDF-4CE7-8F92-786D32BA0BE3}"
 EndProject
@@ -51,7 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transform.Autofac", "Transf
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Transformalize.Transform.Ado.Autofac.Shared", "src\Transformalize.Transform.Ado.Autofac.Shared\Transformalize.Transform.Ado.Autofac.Shared.shproj", "{40CBB7CD-67C1-4483-8368-1280E7C726D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transformalize.Transform.Ado.Autofac.Standard.20", "src\Transformalize.Transform.Ado.Autofac.Standard.20\Transformalize.Transform.Ado.Autofac.Standard.20.csproj", "{51315C6B-EFA2-436F-80E7-3E25D7CB263F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transformalize.Transform.Ado.Autofac.Standard.20", "src\Transformalize.Transform.Ado.Autofac.Standard.20\Transformalize.Transform.Ado.Autofac.Standard.20.csproj", "{51315C6B-EFA2-436F-80E7-3E25D7CB263F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

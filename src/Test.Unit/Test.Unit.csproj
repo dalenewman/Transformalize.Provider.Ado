@@ -76,11 +76,11 @@
     <Reference Include="Transformalize, Version=0.6.28.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Transformalize.0.6.28-beta\lib\net462\Transformalize.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Container.Autofac, Version=0.6.28.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Container.Autofac.0.6.28-beta\lib\net462\Transformalize.Container.Autofac.dll</HintPath>
+    <Reference Include="Transformalize.Container.Autofac, Version=0.6.30.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Container.Autofac.0.6.30-beta\lib\net462\Transformalize.Container.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Transformalize.Provider.Console, Version=0.6.20.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Provider.Console.0.6.20-beta\lib\net462\Transformalize.Provider.Console.dll</HintPath>
+    <Reference Include="Transformalize.Provider.Console, Version=0.6.28.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Transformalize.Provider.Console.0.6.28-beta\lib\net462\Transformalize.Provider.Console.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
