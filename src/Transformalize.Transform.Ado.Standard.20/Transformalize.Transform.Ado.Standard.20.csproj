@@ -4,14 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Transforms.Ado</RootNamespace>
     <AssemblyName>Transformalize.Transform.Ado</AssemblyName>
-    <Version>0.6.29</Version>
+    <Version>0.6.31-beta</Version>
   </PropertyGroup>
 
   <Import Project="..\Transformalize.Transform.Ado.Shared\Transformalize.Transform.Ado.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="Transformalize" Version="0.6.28-beta" />
+    <PackageReference Include="Transformalize" Version="0.6.29-beta" />
   </ItemGroup>
 
   <ItemGroup>

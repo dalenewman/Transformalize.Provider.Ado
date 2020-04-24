@@ -4,9 +4,7 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <RootNamespace>Transformalize.Providers.Ado.Autofac</RootNamespace>
       <AssemblyName>Transformalize.Provider.Ado.Autofac</AssemblyName>
-      <Version>0.6.30-beta</Version>
-      <IncludeSymbols>true</IncludeSymbols>
-      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+      <Version>0.6.31-beta</Version>
       <PackageOutputPath>c:\temp\modules</PackageOutputPath>
       <Authors>Dale Newman</Authors>
       <Company>Transformalize</Company>
@@ -23,10 +21,7 @@
    <Import Project="..\Transformalize.Provider.Ado.Autofac.Shared\Transformalize.Provider.Ado.Autofac.Shared.projitems" Label="Shared" />
 
    <ItemGroup>
-      <PackageReference Include="Autofac" Version="4.9.4" />
-      <PackageReference Include="Cfg-NET.Reader" Version="0.3.5" />
-      <PackageReference Include="Cfg-NET.Shorthand" Version="0.2.12" />
-      <PackageReference Include="Transformalize" Version="0.6.28-beta" />
+      <PackageReference Include="Transformalize.Container.Autofac" Version="0.6.30-beta" />
    </ItemGroup>
 
    <ItemGroup>

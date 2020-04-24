@@ -1,18 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Transforms.Ado.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Transform.Ado.Autofac</AssemblyName>
-    <Version>0.6.29</Version>
+    <Version>0.6.31-beta</Version>
   </PropertyGroup>
 
   <Import Project="..\Transformalize.Transform.Ado.Autofac.Shared\Transformalize.Transform.Ado.Autofac.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.9.4" />
-    <PackageReference Include="Cfg-NET.Shorthand" Version="0.2.12" />
-    <PackageReference Include="Transformalize" Version="0.6.28-beta" />
+    <PackageReference Include="Transformalize.Container.Autofac" Version="0.6.30-beta" />
   </ItemGroup>
 
   <ItemGroup>
