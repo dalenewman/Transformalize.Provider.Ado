@@ -27,5 +27,6 @@ namespace Transformalize.Providers.Ado {
       string SqlDataType(Field field);
       AdoProvider AdoProvider { get; }
       string Terminator { get; }
+      bool SupportsLimit { get; }
    }
 }

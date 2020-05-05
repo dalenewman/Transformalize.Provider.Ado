@@ -4,7 +4,7 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <RootNamespace>Transformalize.Providers.Ado.Autofac</RootNamespace>
       <AssemblyName>Transformalize.Provider.Ado.Autofac</AssemblyName>
-      <Version>0.6.31-beta</Version>
+      <Version>0.7.4-beta</Version>
       <PackageOutputPath>c:\temp\modules</PackageOutputPath>
       <Authors>Dale Newman</Authors>
       <Company>Transformalize</Company>
@@ -21,7 +21,7 @@
    <Import Project="..\Transformalize.Provider.Ado.Autofac.Shared\Transformalize.Provider.Ado.Autofac.Shared.projitems" Label="Shared" />
 
    <ItemGroup>
-      <PackageReference Include="Transformalize.Container.Autofac" Version="0.6.30-beta" />
+      <PackageReference Include="Transformalize.Container.Autofac" Version="0.7.4-beta" />
    </ItemGroup>
 
    <ItemGroup>

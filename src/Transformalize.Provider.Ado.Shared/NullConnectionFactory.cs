@@ -21,8 +21,8 @@ using Transformalize.Configuration;
 
 namespace Transformalize.Providers.Ado {
    public class NullConnectionFactory : IConnectionFactory {
-      public AdoProvider AdoProvider { get; } = AdoProvider.None;
-      public string Terminator { get; } = string.Empty;
+      public AdoProvider AdoProvider { get; set; } = AdoProvider.None;
+      public string Terminator { get; set; } = string.Empty;
 
       public IDbConnection GetConnection(string appName = null) {
          return null;
@@ -39,6 +39,8 @@ namespace Transformalize.Providers.Ado {
       public string Enclose(string name) {
          return name;
       }
+
+      public bool SupportsLimit { get; set; }
 
    }
 }
