@@ -104,7 +104,7 @@ namespace Test.Unit {
                var context = inner.ResolveNamed<InputContext>("TestFact");
                var filter = context.Process.Entities[0].Filter[0];
                var actual = context.SqlSelectFacetFromInput(filter, new NullConnectionFactory() { AdoProvider = AdoProvider.MySql, SupportsLimit = true });
-               Assert.AreEqual("SELECT CONCAT(f2,' (',COUNT(*),')') AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC LIMIT 29", actual);
+               Assert.AreEqual("SELECT CAST(CONCAT(f2,' (',COUNT(*),')') AS CHAR) AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC LIMIT 29", actual);
             }
 
          }

@@ -103,7 +103,7 @@ namespace Transformalize.Providers.Ado.Ext {
          string sql;
 
          if(cf.AdoProvider == AdoProvider.MySql) {
-            sql = $"CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
+            sql = $"CAST(CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS CHAR) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
          } else {
             var left = f.LeftField.Type != "string" ? $"CAST({cf.Enclose(f.LeftField.Name)} AS NVARCHAR(128))" : cf.Enclose(f.LeftField.Name);
             sql = $"{left} + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)}{(c.Entity.NoLock ? " WITH (NOLOCK) " : string.Empty)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
@@ -545,7 +545,7 @@ AND i.{firstKey} IS NULL;";
       private static string GetRequiredOrderBy(Field[] fields, IConnectionFactory cf) {
          var keys = string.Join(", ", fields.Where(f => f.PrimaryKey).Select(f => cf.Enclose(f.Name) + " ASC"));
          if (string.IsNullOrEmpty(keys)) {
-            keys = fields.First(f => f.Input).Name + " ASC";
+            keys = cf.Enclose(fields.First(f => f.Input).Name) + " ASC";
          }
          return $" ORDER BY {keys}";
       }
