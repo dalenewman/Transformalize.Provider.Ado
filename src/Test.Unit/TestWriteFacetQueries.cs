@@ -111,6 +111,31 @@ namespace Test.Unit {
       }
 
       [TestMethod]
+      public void CreateForSqlite() {
+         var logger = new ConsoleLogger();
+         using (var outer = new ConfigurationContainer().CreateScope(TestCfg1, logger)) {
+
+            // get and test process
+            var process = outer.Resolve<Process>();
+            foreach (var error in process.Errors()) {
+               Console.WriteLine(error);
+            }
+            Assert.AreEqual(0, process.Errors().Length);
+
+            process.Entities.First().Filter.First().Size = 31;
+
+            using (var inner = new Container(new AdoProviderModule()).CreateScope(process, logger)) {
+               var context = inner.ResolveNamed<InputContext>("TestFact");
+               var filter = context.Process.Entities[0].Filter[0];
+               var actual = context.SqlSelectFacetFromInput(filter, new NullConnectionFactory() { AdoProvider = AdoProvider.SqLite, SupportsLimit = true });
+               Assert.AreEqual("SELECT f2 || ' (' || CAST(COUNT(*) AS NVARCHAR(32)) || ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC LIMIT 31", actual);
+            }
+
+         }
+      }
+
+
+      [TestMethod]
       public void AllFiltersAreIgnored() {
          const string xml = @"
    <cfg name='Test'>
