@@ -260,7 +260,7 @@ FROM (
       public static string SqlDeleteOutputCrossDatabase(this OutputContext c, IConnectionFactory cf, int batchId) {
 
          var schema = c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema);
-         var inputDatabase = c.Process.Connections.First(cn => cn.Name == c.Entity.Connection).Database;
+         var inputDatabase = c.Process.Connections.First(cn => cn.Name == c.Entity.Input).Database;
          var inputName = cf.Enclose(inputDatabase) + "." + schema + "." + cf.Enclose(c.Entity.Name);
          var outputName = cf.Enclose(c.Entity.OutputTableName(c.Process.Name));
          var joins = string.Join(" AND ", c.Entity.GetPrimaryKey().Select(pk => "i." + cf.Enclose(pk.Name) + " = o." + pk.FieldName()));

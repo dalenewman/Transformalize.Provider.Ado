@@ -44,7 +44,7 @@ namespace Transformalize.Providers.Ado {
          _cf = cf;
          _connection = readFrom == ReadFrom.Output
              ? context.Process.Connections.First(c => c.Name == "output")
-             : context.Process.Connections.First(c => c.Name == context.Entity.Connection);
+             : context.Process.Connections.First(c => c.Name == context.Entity.Input);
          _tableOrView = readFrom == ReadFrom.Output ? context.Entity.OutputTableName(context.Process.Name) : context.Entity.Name;
          _schemaPrefix = readFrom == ReadFrom.Output ? string.Empty : (context.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(context.Entity.Schema) + ".");
          _filter = readFrom == ReadFrom.Output ? $"WHERE {cf.Enclose(_context.Entity.TflDeleted().FieldName())} != 1" : string.Empty;

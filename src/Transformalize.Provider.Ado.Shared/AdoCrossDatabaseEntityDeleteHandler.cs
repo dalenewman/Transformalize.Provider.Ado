@@ -55,8 +55,8 @@ namespace Transformalize.Providers.Ado {
       /// <returns></returns>
       public static bool IsApplicable(Process process, Entity entity) {
 
-         var input = process.Connections.FirstOrDefault(c => c.Name == entity.Connection);
-         var output = process.Output();
+         var input = process.Connections.FirstOrDefault(c => c.Name == entity.Input);
+         var output = process.GetOutputConnection();
          if(input == null || output == null){
             return false;
          }

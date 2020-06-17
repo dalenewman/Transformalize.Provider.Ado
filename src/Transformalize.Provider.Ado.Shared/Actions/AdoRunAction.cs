@@ -23,8 +23,6 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Dynamic;
 using System.Linq;
-using Transformalize.Actions;
-using Transformalize.Configuration;
 using Transformalize.Contracts;
 using Transformalize.Extensions;
 
