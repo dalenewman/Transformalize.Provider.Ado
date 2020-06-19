@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Validators;
+using System.Runtime.InteropServices;
 using Transformalize.Configuration;
 using Transformalize.Containers.Autofac;
 using Transformalize.Contracts;
@@ -91,7 +94,7 @@ namespace Benchmark {
 
    public class Program {
       private static void Main(string[] args) {
-         var summary = BenchmarkRunner.Run<Benchmarks>();
+         var summary = BenchmarkRunner.Run<Benchmarks>(ManualConfig.Create(DefaultConfig.Instance).With(ConfigOptions.DisableOptimizationsValidator));
       }
 
    }

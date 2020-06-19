@@ -4,13 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Transforms.Ado.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Transform.Ado.Autofac</AssemblyName>
-    <Version>0.8.1-beta</Version>
+    <Version>0.8.8-beta</Version>
   </PropertyGroup>
 
   <Import Project="..\Transformalize.Transform.Ado.Autofac.Shared\Transformalize.Transform.Ado.Autofac.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
-    <PackageReference Include="Transformalize.Container.Autofac" Version="0.8.1-beta" />
+    <PackageReference Include="Transformalize.Container.Autofac" Version="0.8.8-beta" />
   </ItemGroup>
 
   <ItemGroup>
