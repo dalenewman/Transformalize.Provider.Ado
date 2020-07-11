@@ -154,7 +154,7 @@ namespace Transformalize.Providers.Ado {
                             Deletes = Convert.ToInt64(Context.Entity.Deletes),
                             End = DateTime.Now,
                             Entity = Context.Entity.Alias,
-                            Input = Context.Entity.Connection,
+                            Input = Context.Entity.Input,
                             Context.Entity.BatchId
                         });
                     } catch (System.Data.Common.DbException e) {

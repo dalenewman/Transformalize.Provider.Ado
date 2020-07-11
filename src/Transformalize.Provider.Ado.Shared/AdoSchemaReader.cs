@@ -138,7 +138,7 @@ namespace Transformalize.Providers.Ado {
                         entities.Add(new Entity {
                             Schema = reader.GetString(0),
                             Name = reader.GetString(1),
-                            Connection = _c.Connection.Name
+                            Input = _c.Connection.Name
                         });
                     }
                 }
@@ -158,7 +158,7 @@ namespace Transformalize.Providers.Ado {
                 schema.Entities.Add(new Entity {
                     Name = _c.Connection.Table,
                     Schema = owner,
-                    Connection = _c.Connection.Name,
+                    Input = _c.Connection.Name,
                     Fields = GetFields(_c.Connection.Table, string.Empty, owner).ToList()
                 });
             }
