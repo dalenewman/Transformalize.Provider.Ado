@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Transform.Ado.Autofac</id>
-    <version>0.8.15-beta</version>
+    <version>0.8.26-beta</version>
     <title>Transformalize ADO based transforms</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -10,17 +10,17 @@
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Transformalize Transform using ADO</description>
-    <releaseNotes>adjusted facet queries for postgresql</releaseNotes>
+    <releaseNotes></releaseNotes>
     <copyright>Copyright 2013-2020</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="net462">
-        <dependency id="Transformalize.Container.Autofac" version="0.8.15-beta" />
-        <dependency id="Transformalize.Transform.Ado" version="0.8.15-beta" />
+        <dependency id="Transformalize.Container.Autofac" version="0.8.23-beta" />
+        <dependency id="Transformalize.Transform.Ado" version="0.8.26-beta" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="Transformalize.Container.Autofac" version="0.8.15-beta" />
-        <dependency id="Transformalize.Transform.Ado" version="0.8.15-beta" />
+        <dependency id="Transformalize.Container.Autofac" version="0.8.23-beta" />
+        <dependency id="Transformalize.Transform.Ado" version="0.8.26-beta" />
       </group>
     </dependencies>
   </metadata>
