@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Transform.Ado</id>
-    <version>0.8.31-beta</version>
+    <version>0.8.32-beta</version>
     <title>Transformalize Transform using ADO</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -10,16 +10,17 @@
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Transformalize Transform using ADO</description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>
+    </releaseNotes>
     <copyright>Copyright 2013-2020</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="net462">
-        <dependency id="Transformalize" version="0.8.28-beta" />
+        <dependency id="Transformalize" version="0.8.31-beta" />
         <dependency id="Dapper" version="1.60.6" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="Transformalize" version="0.8.28-beta" />
+        <dependency id="Transformalize" version="0.8.31-beta" />
         <dependency id="Dapper" version="1.60.6" />
       </group>
     </dependencies>

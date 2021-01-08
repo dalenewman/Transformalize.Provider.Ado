@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Providers.Ado</RootNamespace>
     <AssemblyName>Transformalize.Provider.Ado</AssemblyName>
-    <Version>0.8.31-beta</Version>
+    <Version>0.8.32-beta</Version>
     <PackageOutputPath>c:\temp\modules</PackageOutputPath>
     <Authors>Dale Newman</Authors>
     <Company>Transformalize</Company>
@@ -18,7 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.60.6" />
-    <PackageReference Include="Transformalize" Version="0.8.28-beta" />
+    <PackageReference Include="Transformalize" Version="0.8.31-beta" />
   </ItemGroup>
   <Import Project="..\Transformalize.Provider.Ado.Shared\Transformalize.Provider.Ado.Shared.projitems" Label="Shared" />
   <ItemGroup>

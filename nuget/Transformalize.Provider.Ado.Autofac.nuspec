@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado.Autofac</id>
-    <version>0.8.31-beta</version>
+    <version>0.8.32-beta</version>
     <title>Transformalize Transform and Provider using ADO Autofac Module</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -10,17 +10,18 @@
     <projectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>common ado provider stuff</description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes>
+    </releaseNotes>
     <copyright>Copyright 2013-2020</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="net462">
-        <dependency id="Transformalize.Container.Autofac" version="0.8.28-beta" />
-        <dependency id="Transformalize.Provider.Ado" version="0.8.31-beta" />
+        <dependency id="Transformalize.Container.Autofac" version="0.8.31-beta" />
+        <dependency id="Transformalize.Provider.Ado" version="0.8.32-beta" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="Transformalize.Container.Autofac" version="0.8.28-beta" />
-        <dependency id="Transformalize.Provider.Ado" version="0.8.31-beta" />
+        <dependency id="Transformalize.Container.Autofac" version="0.8.31-beta" />
+        <dependency id="Transformalize.Provider.Ado" version="0.8.32-beta" />
       </group>
     </dependencies>
   </metadata>

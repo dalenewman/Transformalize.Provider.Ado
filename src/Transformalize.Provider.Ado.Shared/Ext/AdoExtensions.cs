@@ -104,15 +104,15 @@ namespace Transformalize.Providers.Ado.Ext {
 
          switch (cf.AdoProvider) {
             case AdoProvider.MySql:
-               sql = $"CAST(CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS CHAR) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
+               sql = $"CAST(CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS CHAR) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} {f.Order.ToUpper()}";
                break;
             case AdoProvider.PostgreSql:
-               sql = $"CAST(CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS VARCHAR(128)) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
+               sql = $"CAST(CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS VARCHAR(128)) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} {f.Order.ToUpper()}";
                break;
             default:
                var concat = cf.AdoProvider == AdoProvider.SqLite ? "||" : "+";
                var left = f.LeftField.Type != "string" ? $"CAST({cf.Enclose(f.LeftField.Name)} AS NVARCHAR(128))" : cf.Enclose(f.LeftField.Name);
-               sql = $"{left} {concat} ' (' {concat} CAST(COUNT(*) AS NVARCHAR(32)) {concat} ')' AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)}{(c.Entity.NoLock ? " WITH (NOLOCK) " : string.Empty)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} ASC";
+               sql = $"{left} {concat} ' (' {concat} CAST(COUNT(*) AS NVARCHAR(32)) {concat} ')' AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)}{(c.Entity.NoLock ? " WITH (NOLOCK) " : string.Empty)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} {f.Order.ToUpper()}";
                break;
          }
 

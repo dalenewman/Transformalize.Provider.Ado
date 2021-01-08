@@ -79,8 +79,9 @@ namespace Test.Unit {
             using (var inner = new Container(new AdoProviderModule()).CreateScope(process, logger)) {
                var context = inner.ResolveNamed<InputContext>("TestFact");
                var filter = context.Process.Entities[0].Filter[0];
+               filter.Order = "desc";
                var actual = context.SqlSelectFacetFromInput(filter, new NullConnectionFactory() { AdoProvider = AdoProvider.SqlServer, SupportsLimit = false });
-               Assert.AreEqual("SELECT TOP 26 f2 + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC", actual);
+               Assert.AreEqual("SELECT TOP 26 f2 + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 DESC", actual);
             }
 
          }
