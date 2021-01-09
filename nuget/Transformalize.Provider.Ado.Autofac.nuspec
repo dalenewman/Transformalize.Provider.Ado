@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado.Autofac</id>
-    <version>0.8.32-beta</version>
+    <version>0.8.33-beta</version>
     <title>Transformalize Transform and Provider using ADO Autofac Module</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -17,11 +17,11 @@
     <dependencies>
       <group targetFramework="net462">
         <dependency id="Transformalize.Container.Autofac" version="0.8.31-beta" />
-        <dependency id="Transformalize.Provider.Ado" version="0.8.32-beta" />
+        <dependency id="Transformalize.Provider.Ado" version="0.8.33-beta" />
       </group>
       <group targetFramework="netstandard2.0">
         <dependency id="Transformalize.Container.Autofac" version="0.8.31-beta" />
-        <dependency id="Transformalize.Provider.Ado" version="0.8.32-beta" />
+        <dependency id="Transformalize.Provider.Ado" version="0.8.33-beta" />
       </group>
     </dependencies>
   </metadata>
