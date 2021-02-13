@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Providers.Ado.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Provider.Ado.Autofac</AssemblyName>
-    <Version>0.8.33-beta</Version>
+    <Version>0.8.34-beta</Version>
     <PackageOutputPath>c:\temp\modules</PackageOutputPath>
     <Authors>Dale Newman</Authors>
     <Company>Transformalize</Company>
