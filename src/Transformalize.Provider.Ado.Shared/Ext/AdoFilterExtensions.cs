@@ -136,7 +136,7 @@ namespace Transformalize.Providers.Ado.Ext {
             } else {
                if (otherField.Type.StartsWith("bool")) {
                   var v = value.ToLower();
-                  return v == "true" || v == "yes" ? "1" : "0";
+                  return v == "1" || v == "true" || v == "yes" ? "1" : "0";
                } else {
                   return value;
                }
