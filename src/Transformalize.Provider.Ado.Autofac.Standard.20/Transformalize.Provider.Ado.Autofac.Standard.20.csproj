@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Providers.Ado.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Provider.Ado.Autofac</AssemblyName>
-    <Version>0.10.1-beta</Version>
+    <Version>0.10.2</Version>
     <PackageOutputPath>c:\temp\modules</PackageOutputPath>
     <Authors>Dale Newman</Authors>
     <Company>Transformalize</Company>
@@ -15,12 +15,12 @@
     <PackageTags>etl,ado,transformalize</PackageTags>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <FileVersion>0.10.1</FileVersion>
-    <AssemblyVersion>0.10.1</AssemblyVersion>
+    <FileVersion>0.10.2</FileVersion>
+    <AssemblyVersion>0.10.2</AssemblyVersion>
   </PropertyGroup>
   <Import Project="..\Transformalize.Provider.Ado.Autofac.Shared\Transformalize.Provider.Ado.Autofac.Shared.projitems" Label="Shared" />
   <ItemGroup>
-    <PackageReference Include="Transformalize.Container.Autofac" Version="0.10.0-beta" />
+    <PackageReference Include="Transformalize.Container.Autofac" Version="0.10.2-beta" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Transformalize.Provider.Ado.Standard.20\Transformalize.Provider.Ado.Standard.20.csproj" />

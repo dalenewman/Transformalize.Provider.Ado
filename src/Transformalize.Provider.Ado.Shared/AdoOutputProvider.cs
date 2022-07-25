@@ -55,9 +55,6 @@ namespace Transformalize.Providers.Ado {
          string objectName;
 
          switch (_cf.AdoProvider) {
-            case AdoProvider.PostgreSql:
-               objectName = _cf.Enclose(_context.Entity.OutputViewName(_context.Process.Name));
-               break;
             case AdoProvider.SqlCe:
                objectName = _cf.Enclose(_context.Entity.OutputTableName(_context.Process.Name));
                break;

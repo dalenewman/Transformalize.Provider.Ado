@@ -50,10 +50,11 @@ namespace Transformalize.Providers.Ado {
          }
 
          string sql;
+         var versionName = _context.Connection.Provider == "postgresql" && version.Name == "xmin" ? "xmin::text" : _cf.Enclose(version.Name);
          if (_context.Connection.Provider == "sqlserver" && version.Type == "byte[]" && version.Length == "8") {
-            sql = $"SELECT MAX({_cf.Enclose(version.Name)}) FROM {schema}{_cf.Enclose(_context.Entity.Name)} WHERE {_cf.Enclose(version.Name)} < MIN_ACTIVE_ROWVERSION() {(filter == string.Empty ? string.Empty : " AND " + filter)}";
+            sql = $"SELECT MAX({versionName}) FROM {schema}{_cf.Enclose(_context.Entity.Name)} WHERE {versionName} < MIN_ACTIVE_ROWVERSION() {(filter == string.Empty ? string.Empty : " AND " + filter)}";
          } else {
-            sql = $"SELECT MAX({_cf.Enclose(version.Name)}) FROM {schema}{_cf.Enclose(_context.Entity.Name)} {(filter == string.Empty ? string.Empty : " WHERE " + filter)}";
+            sql = $"SELECT MAX({versionName}) FROM {schema}{_cf.Enclose(_context.Entity.Name)} {(filter == string.Empty ? string.Empty : " WHERE " + filter)}";
          }
 
          _context.Debug(() => $"Loading Input Version: {sql}");
