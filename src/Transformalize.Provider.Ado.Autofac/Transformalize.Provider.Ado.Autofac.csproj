@@ -1,94 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E1C8C453-BB2E-4160-99A2-03506B76B7E8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Transformalize.Providers.Ado.Autofac</RootNamespace>
     <AssemblyName>Transformalize.Provider.Ado.Autofac</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <Version>0.10.3-beta</Version>
+    <PackageOutputPath>c:\temp\modules</PackageOutputPath>
+    <Authors>Dale Newman</Authors>
+    <Company>Transformalize</Company>
+    <Description>An ADO Provider Autofac Module for Transformalize</Description>
+    <Copyright>Copyright © 2020-2024 Dale Newman</Copyright>
+    <PackageProjectUrl>https://github.com/dalenewman/Transformalize.Provider.Ado</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dalenewman/Transformalize.Provider.Ado.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>etl,ado,transformalize</PackageTags>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <FileVersion>0.10.3</FileVersion>
+    <AssemblyVersion>0.10.3</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="Cfg.Net.Environment, Version=0.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cfg-NET.Environment.0.14.0-beta\lib\netstandard2.0\Cfg.Net.Environment.dll</HintPath>
-    </Reference>
-    <Reference Include="Cfg.Net.Reader, Version=0.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cfg-NET.Reader.0.14.0-beta\lib\netstandard2.0\Cfg.Net.Reader.dll</HintPath>
-    </Reference>
-    <Reference Include="Cfg.Net.Shorthand, Version=0.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cfg-NET.Shorthand.0.14.0-beta\lib\netstandard2.0\Cfg.Net.Shorthand.dll</HintPath>
-    </Reference>
-    <Reference Include="CfgNet, Version=0.14.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Cfg-NET.0.14.0-beta\lib\net462\CfgNet.dll</HintPath>
-    </Reference>
-    <Reference Include="DateMath, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DateMath.1.2.0\lib\net462\DateMath.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Transformalize, Version=0.10.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.0.10.2-beta\lib\net462\Transformalize.dll</HintPath>
-    </Reference>
-    <Reference Include="Transformalize.Container.Autofac, Version=0.10.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Transformalize.Container.Autofac.0.10.2-beta\lib\net462\Transformalize.Container.Autofac.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Transformalize.Container.Autofac" Version="0.10.2-beta" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>
+      </PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Transformalize.Provider.Ado\Transformalize.Provider.Ado.csproj">
-      <Project>{a90a2043-2e23-4276-aaca-b3e9c1ec867d}</Project>
-      <Name>Transformalize.Provider.Ado</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Transformalize.Provider.Ado\Transformalize.Provider.Ado.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="..\Transformalize.Provider.Ado.Autofac.Shared\Transformalize.Provider.Ado.Autofac.Shared.projitems" Label="Shared" />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>set f="$(SolutionDir)..\Transformalize\Pipeline.Command\plugins"
-
-if exist %25f%25 copy /Y "$(TargetDir)Dapper.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.pdb" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.Autofac.dll" "%25f%25"
-if exist %25f%25 copy /Y "$(TargetDir)Transformalize.Provider.Ado.Autofac.pdb" "%25f%25"
-
-</PostBuildEvent>
-  </PropertyGroup>
 </Project>

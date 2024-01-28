@@ -1,11 +1,7 @@
-﻿using System;
-using System.Linq;
-using Autofac;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Autofac;
 using Transformalize.Configuration;
 using Transformalize.Containers.Autofac;
 using Transformalize.Context;
-using Transformalize.Contracts;
 using Transformalize.Providers.Ado;
 using Transformalize.Providers.Ado.Autofac;
 using Transformalize.Providers.Ado.Ext;
