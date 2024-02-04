@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Transform.Ado.Autofac</id>
-    <version>0.10.3-beta</version>
+    <version>0.10.4-beta</version>
     <title>Transformalize ADO based transforms</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -16,7 +16,7 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="Transformalize.Container.Autofac" version="0.10.2-beta" />
-        <dependency id="Transformalize.Transform.Ado" version="0.10.2-beta" />
+        <dependency id="Transformalize.Transform.Ado" version="0.10.4-beta" />
       </group>
     </dependencies>
   </metadata>
