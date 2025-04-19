@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Transform.Ado.Autofac</id>
-    <version>0.10.4-beta</version>
+    <version>0.11.1-beta</version>
     <title>Transformalize ADO based transforms</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -11,12 +11,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Transformalize Transform using ADO</description>
     <releaseNotes>general maintenance</releaseNotes>
-    <copyright>Copyright 2013-2024</copyright>
+    <copyright>Copyright 2013-2025</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="Transformalize.Container.Autofac" version="0.10.2-beta" />
-        <dependency id="Transformalize.Transform.Ado" version="0.10.4-beta" />
+        <dependency id="Transformalize.Container.Autofac" version="0.11.1-beta" />
+        <dependency id="Transformalize.Transform.Ado" version="0.11.1-beta" />
       </group>
     </dependencies>
   </metadata>

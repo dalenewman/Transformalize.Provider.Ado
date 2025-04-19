@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Transformalize.Provider.Ado</id>
-    <version>0.10.3-beta</version>
+    <version>0.11.1-beta</version>
     <title>Transformalize Provider using ADO</title>
     <authors>Dale Newman</authors>
     <owners>Dale Newman</owners>
@@ -11,12 +11,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>common ado provider stuff module</description>
     <releaseNotes>general maintenance</releaseNotes>
-    <copyright>Copyright 2013-2024</copyright>
+    <copyright>Copyright 2013-2025</copyright>
     <tags>etl</tags>
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="Transformalize" version="0.10.2-beta" />
-        <dependency id="Dapper" version="2.1.28" />
+        <dependency id="Transformalize" version="0.11.1-beta" />
+        <dependency id="Dapper" version="2.1.35" />
       </group>
     </dependencies>
   </metadata>
