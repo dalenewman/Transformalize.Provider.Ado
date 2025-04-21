@@ -55,7 +55,7 @@ namespace Test.Unit {
                var context = inner.ResolveNamed<InputContext>("TestFact");
                var filter = context.Process.Entities[0].Filter[0];
                var actual = context.SqlSelectFacetFromInput(filter, new NullConnectionFactory() { AdoProvider = AdoProvider.SqlServer, SupportsLimit = false });
-               Assert.AreEqual("SELECT f2 + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC", actual);
+               Assert.AreEqual("SELECT CAST(f2 AS NVARCHAR(128)) + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC", actual);
             }
 
          }
@@ -81,7 +81,7 @@ namespace Test.Unit {
                var filter = context.Process.Entities[0].Filter[0];
                filter.Order = "desc";
                var actual = context.SqlSelectFacetFromInput(filter, new NullConnectionFactory() { AdoProvider = AdoProvider.SqlServer, SupportsLimit = false });
-               Assert.AreEqual("SELECT TOP 26 f2 + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 DESC", actual);
+               Assert.AreEqual("SELECT TOP 26 CAST(f2 AS NVARCHAR(128)) + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 DESC", actual);
             }
 
          }
@@ -129,7 +129,7 @@ namespace Test.Unit {
                var context = inner.ResolveNamed<InputContext>("TestFact");
                var filter = context.Process.Entities[0].Filter[0];
                var actual = context.SqlSelectFacetFromInput(filter, new NullConnectionFactory() { AdoProvider = AdoProvider.SqLite, SupportsLimit = true });
-               Assert.AreEqual("SELECT f2 || ' (' || CAST(COUNT(*) AS NVARCHAR(32)) || ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC LIMIT 31", actual);
+               Assert.AreEqual("SELECT CAST(f2 AS NVARCHAR(128)) || ' (' || CAST(COUNT(*) AS NVARCHAR(32)) || ')' AS From, f2 AS To FROM Fact WHERE (1=2) GROUP BY f2 ORDER BY f2 ASC LIMIT 31", actual);
             }
 
          }
@@ -174,7 +174,7 @@ namespace Test.Unit {
                var context = inner.ResolveNamed<InputContext>("TestFact");
                var filter = context.Process.Entities[0].Filter[0];
                var actual = context.SqlSelectFacetFromInput(filter, new NullConnectionFactory() { AdoProvider = AdoProvider.SqlServer, SupportsLimit = false });
-               Assert.AreEqual("SELECT f2 + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact GROUP BY f2 ORDER BY f2 ASC", actual);
+               Assert.AreEqual("SELECT CAST(f2 AS NVARCHAR(128)) + ' (' + CAST(COUNT(*) AS NVARCHAR(32)) + ')' AS From, f2 AS To FROM Fact GROUP BY f2 ORDER BY f2 ASC", actual);
             }
 
          }
