@@ -3,13 +3,13 @@
       <TargetFramework>netstandard2.0</TargetFramework>
       <RootNamespace>Transformalize.Transforms.Ado.Autofac</RootNamespace>
       <AssemblyName>Transformalize.Transform.Ado.Autofac</AssemblyName>
-      <Version>0.11.2</Version>
+      <Version>0.11.3-beta</Version>
       <Copyright>Copyright © 2020-2025 Dale Newman</Copyright>
-      <FileVersion>0.11.2</FileVersion>
-      <AssemblyVersion>0.11.2</AssemblyVersion>
+      <FileVersion>0.11.3</FileVersion>
+      <AssemblyVersion>0.11.3</AssemblyVersion>
    </PropertyGroup>
    <ItemGroup>
-      <PackageReference Include="Transformalize.Container.Autofac" Version="0.11.1-beta" />
+      <PackageReference Include="Transformalize.Container.Autofac" Version="0.11.3-beta" />
    </ItemGroup>
    <ItemGroup>
      <ProjectReference Include="..\Transformalize.Transform.Ado\Transformalize.Transform.Ado.csproj" />
