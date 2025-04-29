@@ -107,7 +107,7 @@ namespace Transformalize.Providers.Ado.Ext {
                sql = $"CAST(CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS CHAR) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} {f.Order.ToUpper()}";
                break;
             case AdoProvider.PostgreSql:
-               sql = $"CAST(CONCAT({cf.Enclose(f.LeftField.Name)},' (',COUNT(*),')') AS VARCHAR(128)) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} {f.Order.ToUpper()}";
+               sql = $"CAST(CONCAT(CAST({cf.Enclose(f.LeftField.Name)} AS VARCHAR(116)),' (',COUNT(*),')') AS VARCHAR(128)) AS {cf.Enclose("From")}, {cf.Enclose(f.LeftField.Name)} AS {cf.Enclose("To")} FROM {(c.Entity.Schema == string.Empty ? string.Empty : cf.Enclose(c.Entity.Schema) + ".")}{cf.Enclose(c.Entity.Name)} {filter}GROUP BY {cf.Enclose(f.LeftField.Name)} ORDER BY {cf.Enclose(f.LeftField.Name)} {f.Order.ToUpper()}";
                break;
             default:
                var concat = cf.AdoProvider == AdoProvider.SqLite ? "||" : "+";
